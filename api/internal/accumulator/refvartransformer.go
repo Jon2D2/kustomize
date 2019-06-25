@@ -14,7 +14,7 @@ import (
 )
 
 type refVarTransformer struct {
-	varMap            map[string]interface{}
+	varMap            VarMap
 	replacementCounts map[string]int
 	fieldSpecs        []types.FieldSpec
 	mappingFunc       func(string) interface{}
@@ -24,7 +24,7 @@ type refVarTransformer struct {
 // that replaces $(VAR) style variables with values.
 // The fieldSpecs are the places to look for occurrences of $(VAR).
 func newRefVarTransformer(
-	varMap map[string]interface{}, fs []types.FieldSpec) *refVarTransformer {
+	varMap VarMap, fs []types.FieldSpec) *refVarTransformer {
 	return &refVarTransformer{
 		varMap:     varMap,
 		fieldSpecs: fs,
@@ -84,7 +84,7 @@ func (rv *refVarTransformer) replaceVars(in interface{}) (interface{}, error) {
 // after a Transform run.
 func (rv *refVarTransformer) UnusedVars() []string {
 	var unused []string
-	for k := range rv.varMap {
+	for _, k := range rv.varMap.VarNames() {
 		_, ok := rv.replacementCounts[k]
 		if !ok {
 			unused = append(unused, k)
@@ -96,9 +96,13 @@ func (rv *refVarTransformer) UnusedVars() []string {
 // Transform replaces $(VAR) style variables with values.
 func (rv *refVarTransformer) Transform(m resmap.ResMap) error {
 	rv.replacementCounts = make(map[string]int)
-	rv.mappingFunc = expansion2.MappingFuncFor(
-		rv.replacementCounts, rv.varMap)
 	for _, res := range m.Resources() {
+		varSubset, err := rv.varMap.SubsetThatCouldBeReferencedByResource(res)
+		if err != nil {
+			return err
+		}
+		rv.mappingFunc = expansion2.MappingFuncFor(
+			rv.replacementCounts, varSubset)
 		for _, fieldSpec := range rv.fieldSpecs {
 			if res.OrgId().IsSelected(&fieldSpec.Gvk) {
 				if err := transform.MutateField(
