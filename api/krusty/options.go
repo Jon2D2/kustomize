@@ -16,7 +16,7 @@ type Options struct {
 	// per a particular sort order.  When false, don't do the
 	// sort, and instead respect the depth-first resource input
 	// order as specified by the kustomization file(s).
-	DoLegacyResourceSort bool
+	RerorderTransformer string
 
 	// Restrictions on what can be loaded from the file system.
 	// See type definition.
@@ -32,9 +32,9 @@ type Options struct {
 // MakeDefaultOptions returns a default instance of Options.
 func MakeDefaultOptions() *Options {
 	return &Options{
-		DoLegacyResourceSort: true,
-		LoadRestrictions:     types.LoadRestrictionsRootOnly,
-		DoPrune:              false,
-		PluginConfig:         konfig.DisabledPluginConfig(),
+		RerorderTransformer: "legacy",
+		LoadRestrictions:    types.LoadRestrictionsRootOnly,
+		DoPrune:             false,
+		PluginConfig:        konfig.DisabledPluginConfig(),
 	}
 }

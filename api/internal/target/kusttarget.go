@@ -296,6 +296,50 @@ func (kt *KustTarget) configureExternalTransformers() ([]resmap.Transformer, err
 	return kt.pLdr.LoadTransformers(kt.ldr, kt.validator, ra.ResMap())
 }
 
+func (kt *KustTarget) LoadRerorderTransformer(transformername string) (resmap.Transformer, error) {
+	if transformername == "legacy" {
+		// Also the KindOrderTransformer is supposed to be able to order the
+		// exact same way as the LegacyOrderTransformer, let's stay on the safe side.
+		return builtins.NewLegacyOrderTransformerPlugin(), nil
+	}
+
+	path := fmt.Sprintf("%s%s", transformername, "ordertransformer.yaml")
+	_, err := kt.ldr.Load(path)
+
+	if err != nil {
+		var c struct {
+			BuiltinOrderName string   `json:"builtinordername,omitempty" yaml:"builtinordername,omitempty"`
+			KindOrderFirst   []string `json:"kindorder,omitempty" yaml:"kindorder,omitempty"`
+			KindOrderLast    []string `json:"kindorderlast,omitempty" yaml:"kindorderlast,omitempty"`
+		}
+		c.BuiltinOrderName = transformername
+
+		// We did not locate the configuration file for the transformer
+		// Let's use the default configuration instead
+		p := builtins.NewKindOrderTransformerPlugin()
+		err := kt.configureBuiltinPlugin(p, c, builtinhelpers.KindOrderTransformer)
+		if err != nil {
+			return nil, err
+		}
+		return p, nil
+	}
+
+	// We did locate the external transformer.
+	ra := accumulator.MakeEmptyAccumulator()
+	err = kt.accumulateResources(ra, []string{path})
+	if err != nil {
+		return nil, err
+	}
+	lts, err := kt.pLdr.LoadTransformers(kt.ldr, kt.validator, ra.ResMap())
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert the transformers slice into a unique one.
+	t := transform.NewMultiTransformer(lts)
+	return t, err
+}
+
 // accumulateResources fills the given resourceAccumulator
 // with resources read from the given list of paths.
 func (kt *KustTarget) accumulateResources(

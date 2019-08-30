@@ -162,8 +162,8 @@ func loadCrdIntoConfig(
 				err = theConfig.AddNamereferenceFieldSpec(
 					builtinconfig.NameBackReferences{
 						Gvk: resid.Gvk{Kind: kind, Version: version},
-						FieldSpecs: []types.FieldSpec{
-							makeFs(theGvk, append(path, propName, nameKey))},
+						FieldSpecs: []types.FieldSpecConfig{
+							makeFsConfig(theGvk, append(path, propName, nameKey))},
 					})
 				if err != nil {
 					return
@@ -184,5 +184,16 @@ func makeFs(in resid.Gvk, path []string) types.FieldSpec {
 		CreateIfNotPresent: false,
 		Gvk:                in,
 		Path:               strings.Join(path, "/"),
+	}
+}
+
+func makeFsConfig(in resid.Gvk, path []string) types.FieldSpecConfig {
+	return types.FieldSpecConfig{
+		FieldSpec: types.FieldSpec{
+			CreateIfNotPresent: false,
+			Gvk:                in,
+			Path:               strings.Join(path, "/"),
+		},
+		Behavior: "add",
 	}
 }

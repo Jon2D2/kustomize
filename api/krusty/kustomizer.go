@@ -4,7 +4,6 @@
 package krusty
 
 import (
-	"sigs.k8s.io/kustomize/api/builtins"
 	"sigs.k8s.io/kustomize/api/filesys"
 	"sigs.k8s.io/kustomize/api/internal/k8sdeps/transformer"
 	pLdr "sigs.k8s.io/kustomize/api/internal/plugins/loader"
@@ -79,8 +78,11 @@ func (b *Kustomizer) Run(path string) (resmap.ResMap, error) {
 	if err != nil {
 		return nil, err
 	}
-	if b.options.DoLegacyResourceSort {
-		builtins.NewLegacyOrderTransformerPlugin().Transform(m)
+	if b.options.RerorderTransformer != "none" {
+		t, err := kt.LoadRerorderTransformer(b.options.RerorderTransformer)
+		if err == nil && t != nil {
+			t.Transform(m)
+		}
 	}
 	return m, nil
 }

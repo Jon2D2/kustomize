@@ -140,23 +140,25 @@ func TestLoadCRDs(t *testing.T) {
 	nbrs := []builtinconfig.NameBackReferences{
 		{
 			Gvk: resid.Gvk{Kind: "Secret", Version: "v1"},
-			FieldSpecs: []types.FieldSpec{
-				{
+			FieldSpecs: []types.FieldSpecConfig{{
+				FieldSpec: types.FieldSpec{
 					CreateIfNotPresent: false,
 					Gvk:                resid.Gvk{Kind: "MyKind"},
 					Path:               "spec/secretRef/name",
 				},
-			},
+				Behavior: "add",
+			}},
 		},
 		{
 			Gvk: resid.Gvk{Kind: "Bee", Version: "v1beta1"},
-			FieldSpecs: []types.FieldSpec{
-				{
+			FieldSpecs: []types.FieldSpecConfig{{
+				FieldSpec: types.FieldSpec{
 					CreateIfNotPresent: false,
 					Gvk:                resid.Gvk{Kind: "MyKind"},
 					Path:               "spec/beeRef/name",
 				},
-			},
+				Behavior: "add",
+			}},
 		},
 	}
 

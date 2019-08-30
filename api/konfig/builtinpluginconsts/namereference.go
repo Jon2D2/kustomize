@@ -258,7 +258,7 @@ nameReference:
     kind: Ingress
   - path: spec/backend/serviceName
     kind: Ingress
-  - path: spec/service/name
+  - path: spec/service
     kind: APIService
     group: apiregistration.k8s.io
   - path: webhooks/clientConfig/service
@@ -267,6 +267,9 @@ nameReference:
   - path: webhooks/clientConfig/service
     kind: MutatingWebhookConfiguration
     group: admissionregistration.k8s.io
+  - path: spec/conversion/webhookClientConfig/service
+    kind: CustomResourceDefinition
+    group: apiextensions.k8s.io
 
 - kind: Role
   group: rbac.authorization.k8s.io
@@ -345,5 +348,7 @@ nameReference:
     kind: PersistentVolumeClaim
   - path: spec/volumeClaimTemplates/spec/storageClassName
     kind: StatefulSet
+  - path: rules/resourceNames
+    kind: ClusterRole
 `
 )

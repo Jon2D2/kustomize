@@ -24,14 +24,14 @@ func TestAddNamereferenceFieldSpec(t *testing.T) {
 		Gvk: resid.Gvk{
 			Kind: "KindA",
 		},
-		FieldSpecs: []types.FieldSpec{
-			{
+		FieldSpecs: []types.FieldSpecConfig{
+			{FieldSpec: types.FieldSpec{
 				Gvk: resid.Gvk{
 					Kind: "KindB",
 				},
 				Path:               "path/to/a/field",
 				CreateIfNotPresent: false,
-			},
+			}},
 		},
 	}
 
@@ -60,13 +60,6 @@ func TestAddFieldSpecs(t *testing.T) {
 	if len(cfg.NamePrefix) != 1 {
 		t.Fatalf("failed to add nameprefix FieldSpec")
 	}
-	err = cfg.AddSuffixFieldSpec(fieldSpec)
-	if err != nil {
-		t.Fatalf("unexpected err: %v", err)
-	}
-	if len(cfg.NameSuffix) != 1 {
-		t.Fatalf("failed to add namesuffix FieldSpec")
-	}
 	err = cfg.AddLabelFieldSpec(fieldSpec)
 	if err != nil {
 		t.Fatalf("unexpected err: %v", err)
@@ -89,28 +82,28 @@ func TestMerge(t *testing.T) {
 			Gvk: resid.Gvk{
 				Kind: "KindA",
 			},
-			FieldSpecs: []types.FieldSpec{
-				{
+			FieldSpecs: []types.FieldSpecConfig{
+				{FieldSpec: types.FieldSpec{
 					Gvk: resid.Gvk{
 						Kind: "KindB",
 					},
 					Path:               "path/to/a/field",
 					CreateIfNotPresent: false,
-				},
+				}},
 			},
 		},
 		{
 			Gvk: resid.Gvk{
 				Kind: "KindA",
 			},
-			FieldSpecs: []types.FieldSpec{
-				{
+			FieldSpecs: []types.FieldSpecConfig{
+				{FieldSpec: types.FieldSpec{
 					Gvk: resid.Gvk{
 						Kind: "KindC",
 					},
 					Path:               "path/to/a/field",
 					CreateIfNotPresent: false,
-				},
+				}},
 			},
 		},
 	}
@@ -125,16 +118,18 @@ func TestMerge(t *testing.T) {
 			Path:               "path/to/a/field",
 			CreateIfNotPresent: true,
 		},
+		{
+			Gvk:  resid.Gvk{Group: "GroupA", Version: "Version1", Kind: "KindC"},
+			Path: "path/to/a/field",
+		},
 	}
 	cfga := &TransformerConfig{}
 	cfga.AddNamereferenceFieldSpec(nameReference[0])
 	cfga.AddPrefixFieldSpec(fieldSpecs[0])
-	cfga.AddSuffixFieldSpec(fieldSpecs[0])
 
 	cfgb := &TransformerConfig{}
 	cfgb.AddNamereferenceFieldSpec(nameReference[1])
 	cfgb.AddPrefixFieldSpec(fieldSpecs[1])
-	cfga.AddSuffixFieldSpec(fieldSpecs[1])
 
 	actual, err := cfga.Merge(cfgb)
 	if err != nil {
@@ -143,10 +138,6 @@ func TestMerge(t *testing.T) {
 
 	if len(actual.NamePrefix) != 2 {
 		t.Fatal("merge failed for namePrefix FieldSpec")
-	}
-
-	if len(actual.NameSuffix) != 2 {
-		t.Fatal("merge failed for nameSuffix FieldSpec")
 	}
 
 	if len(actual.NameReference) != 1 {
@@ -158,8 +149,6 @@ func TestMerge(t *testing.T) {
 	expected.AddNamereferenceFieldSpec(nameReference[1])
 	expected.AddPrefixFieldSpec(fieldSpecs[0])
 	expected.AddPrefixFieldSpec(fieldSpecs[1])
-	expected.AddSuffixFieldSpec(fieldSpecs[0])
-	expected.AddSuffixFieldSpec(fieldSpecs[1])
 
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("expected: %v\n but got: %v\n", expected, actual)

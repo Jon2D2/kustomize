@@ -102,9 +102,9 @@ func (o *Options) Validate(args []string) (err error) {
 
 func (o *Options) makeOptions() *krusty.Options {
 	opts := &krusty.Options{
-		DoLegacyResourceSort: o.outOrder == legacy,
-		LoadRestrictions:     getFlagLoadRestrictorValue(),
-		DoPrune:              false,
+		RerorderTransformer: o.outOrder.String(),
+		LoadRestrictions:    getFlagLoadRestrictorValue(),
+		DoPrune:             false,
 	}
 	if isFlagEnablePluginsSet() {
 		c, err := konfig.EnabledPluginConfig()
