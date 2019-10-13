@@ -1,0 +1,18 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+namePrefix: frontend-web-
+namespace: sandbox
+
+resources:
+- ../base
+
+patchesStrategicMerge:
+- patch-deploy-env.yaml
+
+configMapGenerator:
+- envs:
+  - env.properties
+  namespace: sandbox
+  name: env

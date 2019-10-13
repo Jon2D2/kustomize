@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: wordpress
+  name: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - env:
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: wordpress-db-auth
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: wordpress-db-auth
+        image: wordpress:4.8-apache
+        name: wordpress
+        ports:
+        - containerPort: 80
+          name: wordpress

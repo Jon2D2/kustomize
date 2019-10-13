@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: intelfpga-demo-job
+spec:
+  template:
+    spec:
+      containers:
+      - command:
+        name: intelfpga-demo-job-1
+        resources:
+          limits:
+            hugepages-2Mi: 10Mi

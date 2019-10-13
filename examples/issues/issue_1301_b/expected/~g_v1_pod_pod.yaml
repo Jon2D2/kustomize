@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod
+spec:
+  volumes:
+  - configMap:
+      name: bar-suffix
+    name: config-bar

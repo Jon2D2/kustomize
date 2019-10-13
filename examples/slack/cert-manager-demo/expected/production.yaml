@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: helloweb-production
+  name: helloweb-production
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: helloweb-production
+  name: helloweb-service-production
+  namespace: helloweb-production
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: helloweb-production
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: helloweb-production
+  name: helloweb-deployment-production
+  namespace: helloweb-production
+spec:
+  selector:
+    matchLabels:
+      app: helloweb-production
+  template:
+    metadata:
+      labels:
+        app: helloweb-production
+    spec:
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello-app
+        ports:
+        - containerPort: 8080
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  labels:
+    app: helloweb-production
+  name: certificate-production
+  namespace: helloweb-production
+spec:
+  acme:
+    config:
+    - domains:
+      - www.demo.example.net
+      http01:
+        ingress: ingress-production
+  commonName: www.demo.example.net
+  dnsNames:
+  - www.demo.example.net
+  issuerRef:
+    kind: Issuer
+    name: issuer-production
+  renewBefore: 360h
+  secretName: secret-www-demo
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  labels:
+    app: helloweb-production
+  name: issuer-production
+  namespace: helloweb-production
+spec:
+  acme:
+    email: demo@example.net
+    http01: {}
+    privateKeySecretRef:
+      name: issuer-letsencrypt-account-key-secret-production
+    server: https://acme-v02.api.letsencrypt.org/directory
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: web-static-ip
+  labels:
+    app: helloweb-production
+  name: ingress-production
+  namespace: helloweb-production
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: helloweb-service-production
+          servicePort: 8080
+        path: /
+  tls:
+  - hosts:
+    - www.demo.example.net
+    secretName: secret-www-demo

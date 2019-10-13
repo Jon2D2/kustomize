@@ -1,0 +1,14 @@
+bases:
+  - foo
+  - bar
+namePrefix: generics-example-
+vars:
+  - name: REPLICAS
+    objref:
+      kind: Deployment
+      name: foo
+      apiVersion: apps/v1beta2
+    fieldref:
+      fieldpath: spec.replicas
+configurations:
+  - transformer.yaml

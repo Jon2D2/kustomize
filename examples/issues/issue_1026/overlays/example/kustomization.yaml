@@ -1,0 +1,9 @@
+resources:
+- ../../base
+
+patchesJson6902:
+- path: patch-service-account.yaml
+  target:
+    version: v1
+    kind: ServiceAccount
+    name: example

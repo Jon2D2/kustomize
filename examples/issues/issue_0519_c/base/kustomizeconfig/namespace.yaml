@@ -1,0 +1,12 @@
+namePrefix:
+- path: metadata/name
+  version: v1
+  kind: Namespace
+  skip: true
+
+# Not implemented yet
+commonLabels:
+- path: metadata/labels
+  version: v1
+  kind: Namespace
+  skip: true

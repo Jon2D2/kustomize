@@ -1,0 +1,7 @@
+nameprefix: validatingwebhook-
+
+configurations:
+- kustomizeconfig.yaml
+
+resources:
+- validatingwebhook.yaml

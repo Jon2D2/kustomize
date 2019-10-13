@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prod-kubeapp1
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: kubeapp1
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prod-kubeapp2
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: kubeapp2
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod-kubeapp1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kubeapp1
+      name: kubeapp1
+    spec:
+      containers:
+      - image: hack4easy/kubesim_health-amd64:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8081
+        name: kubeapp1
+        ports:
+        - containerPort: 8081
+          name: kubeapp1
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8081
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod-kubeapp2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kubeapp2
+      name: kubeapp2
+    spec:
+      containers:
+      - image: hack4easy/kubesim_health-amd64:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8081
+        name: kubeapp2
+        ports:
+        - containerPort: 8081
+          name: kubeapp2
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8081

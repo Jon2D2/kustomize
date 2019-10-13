@@ -1,0 +1,14 @@
+kind: Deployment
+metadata:
+  name: foobar
+spec:
+  template:
+    spec:
+      containers:
+      - name: foobar
+        image: busybox
+        envFrom:
+        - secretRef:
+            name: xxx
+        - configMapRef:
+            name: yyy

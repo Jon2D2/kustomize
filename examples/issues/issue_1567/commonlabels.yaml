@@ -1,0 +1,9 @@
+commonLabels:
+- path: spec/selector/matchLabels
+  kind: StatefulSet
+  behavior: remove
+- path: spec/selector/matchLabels
+  create: false
+  group: apps
+  version: v1beta1
+  kind: StatefulSet

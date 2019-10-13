@@ -1,0 +1,12 @@
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: k8s-dashboard
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: old-namespace
+roleRef:
+  kind: ClusterRole
+  name: k8s-dashboard
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Values
+metadata:
+  name: persistencelayer
+  namespace: build
+spec:
+  port: 28903
+  targetPort: 29903

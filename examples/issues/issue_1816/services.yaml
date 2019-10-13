@@ -1,0 +1,23 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: allpods
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: singleton
+spec:
+  selector:
+    special: singleton
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

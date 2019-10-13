@@ -1,0 +1,5 @@
+bases:
+  - ../base
+namePrefix: stage-
+patchesStrategicMerge:
+  - change-volume-handle.yaml

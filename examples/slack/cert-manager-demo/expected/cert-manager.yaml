@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: helloweb
+  name: helloweb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: helloweb
+  name: helloweb-service
+  namespace: helloweb
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: helloweb
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: helloweb
+  name: helloweb-deployment
+  namespace: helloweb
+spec:
+  selector:
+    matchLabels:
+      app: helloweb
+  template:
+    metadata:
+      labels:
+        app: helloweb
+    spec:
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello-app
+        ports:
+        - containerPort: 8080
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  labels:
+    app: helloweb
+  name: certificate
+  namespace: helloweb
+spec:
+  acme:
+    config:
+    - domains:
+      - demo.example.net
+      http01:
+        ingress: ingress
+  commonName: demo.example.net
+  dnsNames:
+  - demo.example.net
+  issuerRef:
+    kind: Issuer
+    name: issuer
+  renewBefore: 360h
+  secretName: secret-demo
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  labels:
+    app: helloweb
+  name: issuer
+  namespace: helloweb
+spec:
+  acme:
+    email: demo@example.net
+    http01: {}
+    privateKeySecretRef:
+      name: issuer-letsencrypt-account-key-secret
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: web-static-ip
+  labels:
+    app: helloweb
+  name: ingress
+  namespace: helloweb
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: helloweb-service
+          servicePort: 8080
+        path: /
+  tls:
+  - hosts:
+    - demo.example.net
+    secretName: secret-demo

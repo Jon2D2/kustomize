@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    app: nginx
+  name: callout
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - args:
+            - /bin/sh
+            - -ec
+            - curl http://singleton
+            image: buildpack-deps:curl
+            name: callout
+          restartPolicy: Never
+  schedule: '*/1 * * * *'
+  successfulJobsHistoryLimit: 1

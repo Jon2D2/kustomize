@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    my-label: my-app
+  name: scenario1-dev-fallback-v1-my-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      my-label: my-app
+  template:
+    metadata:
+      labels:
+        my-label: my-app
+    spec:
+      containers:
+      - image: my-image:v1
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9090
+        name: my-deployment
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always

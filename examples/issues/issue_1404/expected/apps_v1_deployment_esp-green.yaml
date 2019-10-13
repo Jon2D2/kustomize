@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: This is the production green environment
+  name: esp-green
+  namespace: test
+spec:
+  template:
+    metadata:
+      annotations:
+        note: This is the production green environment
+    spec:
+      containers:
+      - image: 11111.dkr.ecr.us-west-2.amazonaws.com/leaf/esp-service:latest
+        imagePullPolicy: Always
+        name: esp

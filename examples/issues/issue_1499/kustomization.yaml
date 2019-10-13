@@ -1,0 +1,19 @@
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+- envs:
+  - params.env
+  name: workflow-controller-parameters
+vars:
+- fieldref:
+    fieldPath: data.executorImage
+  name: executorImage
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: workflow-controller-parameters
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: node
+  newTag: 8.15.0

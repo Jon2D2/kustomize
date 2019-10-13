@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redissession
+spec:
+  ports:
+  - name: web
+    port: 18203
+    targetPort: 19203
+  selector:
+    app: redissession

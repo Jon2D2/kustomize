@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - backend:
+          serviceName: prod-service
+          servicePort: 80
+        path: /prod
+      - backend:
+          serviceName: prod-service
+          servicePort: 80
+        path: /canary

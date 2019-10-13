@@ -1,0 +1,4 @@
+apiVersion: builtin
+kind: HashTransformer
+metadata:
+  name: hashtransformer

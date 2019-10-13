@@ -1,0 +1,5 @@
+resources:
+- ../base-basens
+- deployment.yaml
+
+patchesStrategicMerge:

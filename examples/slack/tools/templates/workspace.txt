@@ -1,0 +1,12 @@
+
+This folder contains files describing how to address [Issue ISSUENUMBER](https://github.com/kubernetes-sigs/kustomize/issues/ISSUENUMBER)
+
+## Setup the workspace
+
+First, define a place to work:
+
+<!-- @makeWorkplace @test -->
+```bash
+DEMO_HOME=$(mktemp -d)
+```
+

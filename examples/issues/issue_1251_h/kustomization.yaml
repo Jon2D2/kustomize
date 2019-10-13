@@ -1,0 +1,14 @@
+# This file is here for the convenience of building multiple configurations with
+# a single command. No customizations should be placed here as they will not be
+# available if/when projects are configured independently.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+# - bootstrap.yaml
+- manifests/cert-manager
+- manifests/concourse
+- manifests/dns-autoscaler
+- manifests/ingress-nginx
+- manifests/kiam
+- manifests/monitoring
+- manifests/service-catalog

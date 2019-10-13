@@ -1,0 +1,5 @@
+resources:
+- ../base
+
+patchesStrategicMerge:
+- dep-patch.yaml

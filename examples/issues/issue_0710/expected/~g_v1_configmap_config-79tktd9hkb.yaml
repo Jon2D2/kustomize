@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  config-file.json: ""
+kind: ConfigMap
+metadata:
+  labels:
+    app: appName
+  name: config-79tktd9hkb
+  namespace: appName

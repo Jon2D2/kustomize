@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: overlay2-pod
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: overlay2-data

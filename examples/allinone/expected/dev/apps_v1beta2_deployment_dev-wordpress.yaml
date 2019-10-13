@@ -1,0 +1,51 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: wordpress
+  name: dev-wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        foo: bar
+    spec:
+      containers:
+      - env:
+        - name: WORDPRESS_DB_HOST
+          value: dev-mysql
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: dev-mysql-pass
+        image: wordpress:5.2.1-apache
+        name: wordpress
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: wordpress-persistent-storage
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - echo dev-wordpress && echo dev-mysql
+        image: busybox
+        name: init1
+      - command:
+        - sh
+        - -c
+        - echo 10.0.2.3
+        image: busybox
+        name: init2
+      volumes:
+      - emptyDir: {}
+        name: wordpress-persistent-storage

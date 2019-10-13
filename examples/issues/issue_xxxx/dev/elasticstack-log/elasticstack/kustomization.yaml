@@ -1,0 +1,12 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+commonLabels:
+  app.kubernetes.io/part-of: elasticstack
+  part-of: elasticstack
+
+resources:
+  - elasticsearch-data
+  - elasticsearch-master
+  - networkPolicy.yaml

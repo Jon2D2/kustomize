@@ -1,0 +1,6 @@
+commonLabels:
+- path: spec/selector
+  create: false   # <<<<< I wish to disable this behavior
+  version: v1
+  kind: Service
+  behavior: remove

@@ -1,0 +1,12 @@
+apiVersion: builtin
+kind: ImageTagTransformer
+metadata:
+  name: imagetagtransformer2
+imageTag:
+  name: nginx
+  newName: busybox
+# The following fields can be transformed
+# aside from the harcoded image field
+# in containers and initContainers
+fieldSpecs:
+- path: spec/simpletext

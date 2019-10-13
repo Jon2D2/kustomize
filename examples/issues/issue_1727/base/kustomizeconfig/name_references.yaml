@@ -1,0 +1,19 @@
+nameReference:
+- kind: Deployment
+  fieldSpecs:
+  - path: spec/targetRef/name
+    group: autoscaling.k8s.io
+    kind: VerticalPodAutoscaler
+
+- kind: ReplicationController
+  fieldSpecs:
+  - path: spec/targetRef/name
+    group: autoscaling.k8s.io
+    kind: VerticalPodAutoscaler
+
+- kind: ReplicaSet
+  fieldSpecs:
+  - path: spec/targetRef/name
+    group: autoscaling.k8s.io
+    kind: VerticalPodAutoscaler
+

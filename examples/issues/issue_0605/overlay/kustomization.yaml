@@ -1,0 +1,8 @@
+namePrefix: o-
+commonLabels:
+  movie: planetOfTheApes
+patchesStrategicMerge:
+- animalPark.yaml
+resources:
+- ../base
+- ursus.yaml

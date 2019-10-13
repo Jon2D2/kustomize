@@ -1,0 +1,6 @@
+namePrefix: p1-
+nameSuffix: -s1
+resources:
+- resources.yaml
+configurations:
+- ./kustomizeconfig/skip-secrets-prefix.yaml

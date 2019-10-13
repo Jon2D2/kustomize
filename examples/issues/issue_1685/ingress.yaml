@@ -1,0 +1,21 @@
+# ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: wordpress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/issuer: letsencrypt-staging # <--- Reference to Issuer
+spec:
+  tls:
+  - hosts:
+    - example.com
+    secretName: wordpress-cert
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - backend:
+          serviceName: wordpress
+          servicePort: 80
+        path: /

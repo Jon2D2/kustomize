@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  alerts: "groups:\n- \"name\": \"kubernetes-apps\" \n  \"rules\":\n  - \"alert\":
+    \"KubePodCrashLooping\"\n    \"annotations\":\n      \"message\": \"Pod {{ $labels.namespace
+    }}/{{ $labels.pod }} ({{ $labels.container }}) is restarting {{ printf \\\"%.2f\\\"
+    $value }} times / 5 minutes.\"\n      \"runbook_url\": \"https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubepodcrashlooping\"\n
+    \   \"expr\": |\n      rate(kube_pod_container_status_restarts_total{job=\"kubernetes-state-metrics\"}[15m])
+    * 60 * 5 > 0\n    \"for\": \"15m\"\n    \"labels\":\n      \"severity\": \"critical\"\n"
+kind: ConfigMap
+metadata:
+  name: prometheus-server-582ft7fk6f

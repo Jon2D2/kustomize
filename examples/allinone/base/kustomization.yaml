@@ -1,0 +1,77 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ./catalogues/versions.yaml
+- ./catalogues/endpoints.yaml
+- ./catalogues/common-addresses.yaml
+- ./wordpress/deployment.yaml
+- ./wordpress/service.yaml
+- ./mysql/deployment.yaml
+- ./mysql/secret.yaml
+- ./mysql/service.yaml
+
+configurations:
+- kustomizeconfig/Chart.yaml
+- kustomizeconfig/CommonAddresses.yaml
+- kustomizeconfig/EndpointCatalogue.yaml
+- kustomizeconfig/SoftwareVersions.yaml
+- kustomizeconfig/Deployment.yaml
+- kustomizeconfig/Service.yaml
+
+vars:
+- name: Service.wordpress.metadata.name
+  objref:
+    kind: Service
+    name: wordpress
+    apiVersion: v1
+- name: Service.mysql.metadata.name
+  objref:
+    kind: Service
+    name: mysql
+    apiVersion: v1
+- name: SoftwareVersions.software-versions.spec.images.wordpress.tag
+  objref:
+    apiVersion: my.group.org/v1alpha1
+    kind: SoftwareVersions
+    name: software-versions
+  fieldref:
+    fieldpath: spec.images.wordpress.tag
+- name: SoftwareVersions.software-versions.spec.images.mysql.tag
+  objref:
+    apiVersion: my.group.org/v1alpha1
+    kind: SoftwareVersions
+    name: software-versions
+  fieldref:
+    fieldpath: spec.images.mysql.tag
+# Demonstrate the ability to fetch specific index of an index
+- name: CommonAddresses.common-addresses.spec.dns.upstream_servers[2]
+  objref:
+    apiVersion: my.group.org/v1alpha1
+    kind: CommonAddresses
+    name: common-addresses
+  fieldref:
+    fieldpath: spec.dns.upstream_servers[2]
+# Demonstrate the ability to clone entire tree from on object to the other
+- name: Deployment.wordpress.spec.template.spec.initContainers
+  fieldref:
+    fieldpath: spec.template.spec.initContainers
+  objref:
+    apiVersion: apps/v1beta2
+    kind: Deployment
+    name: wordpress
+- name: EndpointCatalogue.endpoints.spec.wordpress.labels
+  objref:
+    apiVersion: my.group.org/v1alpha1
+    kind: EndpointCatalogue
+    name: endpoints
+  fieldref:
+    fieldpath: spec.wordpress.labels
+- name: EndpointCatalogue.endpoints.spec.mysql.labels
+  objref:
+    apiVersion: my.group.org/v1alpha1
+    kind: EndpointCatalogue
+    name: endpoints
+  fieldref:
+    fieldpath: spec.mysql.labels

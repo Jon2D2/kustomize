@@ -16,6 +16,7 @@ First make a place to work:
 <!-- @makeDemoHome @testAgainstLatestRelease -->
 ```
 DEMO_HOME=$(mktemp -d)
+# DEMO_HOME=$HOME/my-demo
 ```
 
 ### Download resources
@@ -29,12 +30,50 @@ Download them:
 
 <!-- @downloadResources @testAgainstLatestRelease -->
 ```
-CONTENT="https://raw.githubusercontent.com\
-/kubernetes-sigs/kustomize\
-/master/examples/springboot"
-
-curl -s -o "$DEMO_HOME/#1.yaml" \
-  "$CONTENT/base/{deployment,service}.yaml"
+mkdir ${DEMO_HOME}/base
+cat <<'EOF' >${DEMO_HOME}/base/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sbdemo
+  labels:
+    app: sbdemo
+spec:
+  selector:
+    matchLabels:
+      app: sbdemo
+  template:
+    metadata:
+      labels:
+        app: sbdemo
+    spec:
+      containers:
+        - name: sbdemo
+          image: jingfang/sbdemo
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: demo-config
+              mountPath: /config
+      volumes:
+        - name: "demo-config"
+          configMap:
+            name: "demo-configmap"
+EOF
+cat <<'EOF' >${DEMO_HOME}/base/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sbdemo
+  labels:
+    app: sbdemo
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: sbdemo
+  type: LoadBalancer
+EOF
 ```
 
 ### Initialize kustomization.yaml
@@ -46,14 +85,14 @@ Start this file:
 
 <!-- @kustomizeYaml @testAgainstLatestRelease -->
 ```
-touch $DEMO_HOME/kustomization.yaml
+touch $DEMO_HOME/base/kustomization.yaml
 ```
 
 ### Add the resources
 
 <!-- @addResources @testAgainstLatestRelease -->
 ```
-cd $DEMO_HOME
+cd $DEMO_HOME/base
 
 kustomize edit add resource service.yaml
 kustomize edit add resource deployment.yaml
@@ -73,7 +112,7 @@ cat kustomization.yaml
 
 <!-- @addConfigMap @testAgainstLatestRelease -->
 ```
-echo "app.name=Kustomize Demo" >$DEMO_HOME/application.properties
+echo "app.name=Kustomize Demo" >$DEMO_HOME/base/application.properties
 
 kustomize edit add configmap demo-configmap \
   --from-file application.properties
@@ -90,6 +129,27 @@ cat kustomization.yaml
 >   name: demo-configmap
 > ```
 
+### Customize Production
+
+We want to create a production customization context
+
+<!-- @customizeProduction @testAgainstLatestRelease -->
+```
+mkdir -p $DEMO_HOME/overlays/production
+cd $DEMO_HOME/overlays/production
+cat <<'EOF' >${DEMO_HOME}/overlays/production/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+configMapGenerator:
+- files:
+  - application-prod.properties
+  behavior: merge
+  name: demo-configmap
+EOF
+```
+
 ### Customize configMap
 
 We want to add database credentials for the prod environment. In general, these credentials can be put into the file `application.properties`.
@@ -102,9 +162,10 @@ For Spring Boot application, we can set an active profile through the environmen
 the application will pick up an extra `application-<profile>.properties` file. With this, we can customize the configMap in two
 steps. Add an environment variable through the patch and add a file to the configMap.
 
+
 <!-- @customizeConfigMap @testAgainstLatestRelease -->
 ```
-cat <<EOF >$DEMO_HOME/patch.yaml
+cat <<EOF >$DEMO_HOME/overlays/production/patch.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -121,15 +182,12 @@ EOF
 
 kustomize edit add patch patch.yaml
 
-cat <<EOF >$DEMO_HOME/application-prod.properties
+cat <<EOF >$DEMO_HOME/overlays/production/application-prod.properties
 spring.jpa.hibernate.ddl-auto=update
 spring.datasource.url=jdbc:mysql://<prod_database_host>:3306/db_example
 spring.datasource.username=root
 spring.datasource.password=admin
 EOF
-
-kustomize edit add configmap \
-  demo-configmap --from-file application-prod.properties
 
 cat kustomization.yaml
 ```
@@ -138,7 +196,6 @@ cat kustomization.yaml
 > ```
 > configMapGenerator:
 > - files:
->   - application.properties
 >   - application-prod.properties
 >   name: demo-configmap
 > ```
@@ -151,7 +208,7 @@ environment):
 
 <!-- @customizeLabel @testAgainstLatestRelease -->
 ```
-cd $DEMO_HOME
+cd $DEMO_HOME/overlays/production
 kustomize edit set nameprefix 'prod-'
 ```
 
@@ -167,7 +224,7 @@ resources:
 
 <!-- @build1 @testAgainstLatestRelease -->
 ```
-kustomize build $DEMO_HOME | grep prod-
+kustomize build $DEMO_HOME/overlays/production | grep prod-
 ```
 
 ### Label Customization
@@ -182,7 +239,7 @@ add a label, but one can always edit
 
 <!-- @customizeLabels @testAgainstLatestRelease -->
 ```
-cat <<EOF >>$DEMO_HOME/kustomization.yaml
+cat <<EOF >>$DEMO_HOME/overlays/production/kustomization.yaml
 commonLabels:
   env: prod
 EOF
@@ -193,7 +250,7 @@ by `prod-` and the label tuple `env:prod`:
 
 <!-- @build2 @testAgainstLatestRelease -->
 ```
-kustomize build $DEMO_HOME | grep -C 3 env
+kustomize build $DEMO_HOME/overlays/production | grep -C 3 env
 ```
 
 ### Download Patch for JVM memory
@@ -203,79 +260,67 @@ the JVM is aware of that limit. In K8s deployment, we can set the resource limit
 some environment variables by downward API. When the container starts to run, it can pick up the environment variables and
 set JVM options accordingly.
 
-Download the patch `memorylimit_patch.yaml`. It contains the memory limits setup.
+Create the patch `memorylimit_patch.yaml`. It contains the memory limits setup.
 
 <!-- @downloadPatch @testAgainstLatestRelease -->
 ```
-curl -s  -o "$DEMO_HOME/#1.yaml" \
-  "$CONTENT/overlays/production/{memorylimit_patch}.yaml"
-
-cat $DEMO_HOME/memorylimit_patch.yaml
+cat <<'EOF' >${DEMO_HOME}/overlays/production/memorylimit_patch.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sbdemo
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: sbdemo
+          resources:
+            limits:
+              memory: 1250Mi
+            requests:
+              memory: 1250Mi
+          env:
+          - name: MEM_TOTAL_MB
+            valueFrom:
+              resourceFieldRef:
+                resource: limits.memory
+EOF
 ```
-
-The output contains
-
-> ```
-> apiVersion: apps/v1
-> kind: Deployment
-> metadata:
->   name: sbdemo
-> spec:
->   template:
->     spec:
->       containers:
->         - name: sbdemo
->           resources:
->             limits:
->               memory: 1250Mi
->             requests:
->               memory: 1250Mi
->           env:
->           - name: MEM_TOTAL_MB
->             valueFrom:
->               resourceFieldRef:
->                 resource: limits.memory
-> ```
 
 ### Download Patch for health check
 We also want to add liveness check and readiness check in the production environment. Spring Boot application
 has end points such as `/actuator/health` for this. We can customize the k8s deployment resource to talk to Spring Boot end point.
 
-Download the patch `healthcheck_patch.yaml`. It contains the liveness probes and readyness probes.
+Create the patch `healthcheck_patch.yaml`. It contains the liveness probes and readyness probes.
 
 <!-- @downloadPatch @testAgainstLatestRelease -->
 ```
-curl -s  -o "$DEMO_HOME/#1.yaml" \
-  "$CONTENT/overlays/production/{healthcheck_patch}.yaml"
-
-cat $DEMO_HOME/healthcheck_patch.yaml
+cat <<'EOF' >${DEMO_HOME}/overlays/production/healthcheck_patch.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sbdemo
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: sbdemo
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          readinessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /actuator/info
+              port: 8080
+EOF
 ```
-
-The output contains
-
-> ```
-> apiVersion: apps/v1
-> kind: Deployment
-> metadata:
->   name: sbdemo
-> spec:
->   template:
->     spec:
->       containers:
->         - name: sbdemo
->           livenessProbe:
->             httpGet:
->               path: /actuator/health
->               port: 8080
->             initialDelaySeconds: 10
->             periodSeconds: 3
->           readinessProbe:
->             initialDelaySeconds: 20
->             periodSeconds: 10
->             httpGet:
->               path: /actuator/info
->               port: 8080
-> ```
 
 ### Add patches
 
@@ -283,7 +328,7 @@ Add these patches to the kustomization:
 
 <!-- @addPatch @testAgainstLatestRelease -->
 ```
-cd $DEMO_HOME
+cd $DEMO_HOME/overlays/production
 kustomize edit add patch memorylimit_patch.yaml
 kustomize edit add patch healthcheck_patch.yaml
 ```
@@ -303,5 +348,5 @@ create the production environment.
 
 <!-- @finalBuild @testAgainstLatestRelease -->
 ```
-kustomize build $DEMO_HOME  # | kubectl apply -f -
+kustomize build $DEMO_HOME/overlays/production  # | kubectl apply -f -
 ```

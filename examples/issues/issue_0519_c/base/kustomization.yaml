@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kubeapp-ns
+
+commonLabels:
+  app: kubeapp
+
+resources:
+- ./namespace.yaml
+- ./mycrd.yaml
+- ./ingress.yaml
+- ./service.yaml
+- ./deployment.yaml
+
+configurations:
+- ./kustomizeconfig/mycrd.yaml
+- ./kustomizeconfig/ingress.yaml
+- ./kustomizeconfig/namespace.yaml
+- ./kustomizeconfig/customresourcedefinition.yaml

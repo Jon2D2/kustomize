@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels: $(EndpointCatalogue.endpoints.spec.mysql.labels)
+spec:
+  ports:
+    - port: 3306
+  selector: $(EndpointCatalogue.endpoints.spec.mysql.labels)

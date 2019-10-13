@@ -1,0 +1,7 @@
+resources:
+- ../b
+configMapGenerator:
+- name: cm
+  behavior: merge
+  literals:
+  - HELLO=WORLD

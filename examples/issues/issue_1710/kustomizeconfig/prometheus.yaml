@@ -1,0 +1,3 @@
+varReference:
+- path: spec/alerting/alertmanagers/namespace
+  kind: Prometheus

@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: helloweb-development
+  name: helloweb-development
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: helloweb-development
+  name: helloweb-service-development
+  namespace: helloweb-development
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: helloweb-development
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: helloweb-development
+  name: helloweb-deployment-development
+  namespace: helloweb-development
+spec:
+  selector:
+    matchLabels:
+      app: helloweb-development
+  template:
+    metadata:
+      labels:
+        app: helloweb-development
+    spec:
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello-app
+        ports:
+        - containerPort: 8080
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  labels:
+    app: helloweb-development
+  name: certificate-development
+  namespace: helloweb-development
+spec:
+  commonName: development.demo.example.net
+  dnsNames:
+  - development.demo.example.net
+  issuerRef:
+    kind: Issuer
+    name: issuer-development
+  renewBefore: 360h
+  secretName: secret-development-demo
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  labels:
+    app: helloweb-development
+  name: selfsigned-certificate-development
+  namespace: helloweb-development
+spec:
+  commonName: development
+  isCA: true
+  issuerRef:
+    kind: Issuer
+    name: selfsigned-issuer-development
+  secretName: ca-secret-development
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  labels:
+    app: helloweb-development
+  name: issuer-development
+  namespace: helloweb-development
+spec:
+  ca:
+    secretName: ca-secret-development
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  labels:
+    app: helloweb-development
+  name: selfsigned-issuer-development
+  namespace: helloweb-development
+spec:
+  selfSigned: {}
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: web-static-ip
+  labels:
+    app: helloweb-development
+  name: ingress-development
+  namespace: helloweb-development
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: helloweb-service-development
+          servicePort: 8080
+        path: /
+  tls:
+  - hosts:
+    - development.demo.example.net
+    secretName: secret-development-demo

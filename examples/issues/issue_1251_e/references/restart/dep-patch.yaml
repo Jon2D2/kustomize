@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restart
+  namespace: patch
+spec:
+  template:
+    spec:
+      restartPolicy: Always

@@ -1,0 +1,11 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+namePrefix: scenario2-dev-fallback-v1-
+resources:
+- ../../common             # Has Deployment
+- ../../scenario/scenario2 # apply changes necessary for scenario2
+- ../../environment/dev    # apply changes for dev
+- ../../processor/fallback # apply changes for fallback
+- ../../version/v1         # Apply v1

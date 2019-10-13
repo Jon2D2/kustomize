@@ -1,0 +1,5 @@
+namespace: X
+
+resources:
+- ../parent
+- ../common

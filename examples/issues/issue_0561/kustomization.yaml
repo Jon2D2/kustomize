@@ -1,0 +1,9 @@
+resources:
+  - base
+configMapGenerator:
+  - name: config
+    namespace: test
+    files:
+      - kustomization.yaml
+patchesStrategicMerge:
+  - patch.yaml

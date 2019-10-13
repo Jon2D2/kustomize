@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm1
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret
+---
+kind: CustomResourceDefinition
+metadata:
+  name: my-crd

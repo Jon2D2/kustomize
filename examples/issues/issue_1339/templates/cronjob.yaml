@@ -1,0 +1,18 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: $(Values.forcronjob.spec.schedule)
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: usingvars
+            image: busybox
+            args: $(Values.forcronjob.spec.args)
+          - name: usingpatch
+            image: busybox
+            args: []
+          restartPolicy: OnFailure

@@ -1,0 +1,23 @@
+apiVersion: builtin
+kind: ReplicaCountTransformer
+metadata:
+  name: replicacounttransformer
+replica:
+  name: my-crd
+  count: 64
+fieldSpecs:
+- path: spec/replicas
+  create: true
+  kind: Deployment
+- path: spec/replicas
+  create: true
+  kind: ReplicationController
+- path: spec/replicas
+  create: true
+  kind: ReplicaSet
+- path: spec/replicas
+  create: true
+  kind: StatefulSet
+- path: spec/replicas
+  create: true
+  kind: MyCRD

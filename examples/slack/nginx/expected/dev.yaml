@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: manifests for dev environement
+  labels:
+    app: nginx
+    variant: dev
+  name: dev-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+      variant: dev
+  template:
+    metadata:
+      annotations:
+        note: manifests for dev environement
+      labels:
+        app: nginx
+        variant: dev
+    spec:
+      containers:
+      - image: nginx:1.16.1
+        name: nginx
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi

@@ -1,0 +1,9 @@
+configMapGenerator:
+- name: public
+  envs:
+  - params.env
+  behavior: merge
+
+
+resources:
+- ../../base

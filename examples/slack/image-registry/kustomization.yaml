@@ -1,0 +1,27 @@
+resources:
+- deployment.yaml
+- values.yaml
+
+images:
+- name: docker.io/nginx
+  newName: from.the.kustomization.yaml/nginx
+- name: docker.io/busybox
+  newName: $(Values.my-values.spec.registry)/busybox
+
+# The following sections are only necessary if you
+# don't have the automatic variables declaration
+# and varRef creation: https://github.com/kubernetes-sigs/kustomize/pull/1208.
+# Uncomment out the vars and configurations section
+# if you don't have the PR
+#
+# vars:
+# - name: Values.my-values.spec.registry
+#   objref:
+#     apiVersion: kustomize.config.k8s.io/v1
+#     kind: Values
+#     name: my-values
+#   fieldref:
+#     fieldpath: spec.registry
+# 
+# configurations:
+# - kustomizeconfig/varreference.yaml

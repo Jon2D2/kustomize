@@ -1,0 +1,8 @@
+kind: Ingress
+apiVersion: apps/v1
+metadata:
+  name: kubeapp
+spec:
+  backend:
+    serviceName: kubeapp
+    servicePort: 80

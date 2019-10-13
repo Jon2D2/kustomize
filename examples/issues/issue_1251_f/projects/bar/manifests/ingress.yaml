@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: bar
+spec:
+  rules:
+    - host: bar$(Values.shared.spec.branch).$(Values.shared.spec.env).$(Values.shared.spec.domain)
+      http:
+        paths:
+        - backend:
+            serviceName: bar
+            servicePort: http

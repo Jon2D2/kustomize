@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    mylabel: myapp
+  name: deploy1
+spec:
+  selector:
+    matchLabels:
+      mylabel: myapp
+  template:
+    metadata:
+      labels:
+        mylabel: myapp
+    spec:
+      containers:
+      - env:
+        - name: SOME_NAME
+          value: somevalue
+        image: image1:v1.0
+        name: container1

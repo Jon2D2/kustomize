@@ -1,0 +1,12 @@
+nameReference:
+- kind: ManagedCertificate
+  group: networking.gke.io
+  version: v1beta1
+  fieldSpecs:
+  - path: metadata/annotations/networking.gke.io\/managed-certificates
+    kind: Ingress
+
+- kind: GKEGlobalStaticIP
+  fieldSpecs:
+  - path: metadata/annotations/kubernetes.io\/ingress.global-static-ip-name
+    kind: Ingress

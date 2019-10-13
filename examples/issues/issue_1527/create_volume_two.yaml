@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: my-app
+        volumeMounts:
+        - name: volume-two
+          mountPath: /data/two
+      volumes:
+        - name: volume-two
+          configMap:
+            name: cm-two
+            items:
+              - key: key-two
+                path: path_two

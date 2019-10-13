@@ -1,0 +1,7 @@
+nameReference:
+- kind: ValidatingWebhookConfiguration
+  version: v1beta1
+  group: admissionregistration.k8s.io
+  fieldSpecs:
+  - path: rules/resourceNames
+    kind: ClusterRole

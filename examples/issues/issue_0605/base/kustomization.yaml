@@ -1,0 +1,22 @@
+namePrefix: x-
+commonLabels:
+  app: myApp
+vars:
+- name: APRIL_DIET
+  objref:
+    kind: Giraffe
+    name: april
+  fieldref:
+    fieldpath: spec.diet
+- name: KOKO_DIET
+  objref:
+    kind: Gorilla
+    name: koko
+  fieldref:
+    fieldpath: spec.diet
+resources:
+- animalPark.yaml
+- giraffes.yaml
+- gorilla.yaml
+configurations:
+- config/custom.yaml

@@ -1,0 +1,14 @@
+namePrefix:
+- path: metadata/name
+  group: networking.k8s.io
+  version: v1beta1
+  kind: Ingress
+  skip: true
+
+# Not implemented yet
+commonLabels:
+- path: metadata/labels
+  group: networking.k8s.io
+  version: v1beta1
+  kind: Ingress
+  skip: true

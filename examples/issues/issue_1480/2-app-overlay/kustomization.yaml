@@ -1,0 +1,11 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+namePrefix: myapp-
+
+resources:
+- ../1-shared-base
+- serviceaccount.yaml
+
+patchesStrategicMerge:
+- add-serviceaccount-to-deployment.yaml

@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strimzi-topic-operator
+spec:
+  template:
+    spec:
+      containers:
+      - name: container2
+        env:
+        - name: STRIMZI_KAFKA_BOOTSTRAP_SERVERS
+          value: updated-kafka-bootstrap:8888
+

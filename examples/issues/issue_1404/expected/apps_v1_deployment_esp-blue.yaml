@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: This is the production blue environment
+  name: esp-blue
+  namespace: test
+spec:
+  template:
+    metadata:
+      annotations:
+        note: This is the production blue environment
+    spec:
+      containers:
+      - image: 11111.dkr.ecr.us-west-2.amazonaws.com/leaf/esp-service:latest
+        imagePullPolicy: Always
+        name: esp

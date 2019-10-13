@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Ingress
+metadata:
+  labels:
+    app: kubeapp
+  name: kubeapp
+  namespace: kubeapp-ns
+spec:
+  backend:
+    serviceName: kubeapp-production
+    servicePort: 80
+  rules:
+  - host: canary.foo.bar
+    http:
+      paths:
+      - backend:
+          serviceName: kubeapp-canary
+          servicePort: 80
+  - host: foo.bar
+    http:
+      paths:
+      - backend:
+          serviceName: kubeapp-production
+          servicePort: 80

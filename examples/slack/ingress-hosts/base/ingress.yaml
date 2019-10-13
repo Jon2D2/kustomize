@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: wordpress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+    - example.com
+    - $(Ingress.wordpress.spec.rules[0].http.paths[0].backend.serviceName)
+    secretName: wordpress-cert
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - backend:
+          serviceName: wordpress
+          servicePort: 80
+        path: /

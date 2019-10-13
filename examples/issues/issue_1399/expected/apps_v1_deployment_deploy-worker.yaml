@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    mylabel: worker
+  name: deploy-worker
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      mylabel: worker
+  template:
+    metadata:
+      labels:
+        mylabel: worker
+    spec:
+      containers:
+      - image: worker-image:v1.0
+        name: container1

@@ -1,0 +1,12 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-mysqld-exporter
+  namespace: mynamespace
+spec:
+  template:
+    spec:
+      containers:
+      - $patch: delete
+        name: cloud-sql-proxy

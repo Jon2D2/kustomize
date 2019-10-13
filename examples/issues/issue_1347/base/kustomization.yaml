@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ./demo.yaml
+namespace: demo1
+namePrefix: prefix-
+nameSuffix: -suffix
+
+configurations:
+- kustomizeconfig.yaml

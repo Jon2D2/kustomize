@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: hello-world-map
+
+data:
+  ingress_host: example.org

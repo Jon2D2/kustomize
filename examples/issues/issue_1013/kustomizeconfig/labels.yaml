@@ -1,0 +1,6 @@
+commonLabels:
+- path: spec/template/spec/affinity/podAntiAffinity/preferredDuringSchedulingIgnoredDuringExecution/podAffinityTerm/labelSelector/matchLabels
+  create: true
+  group: apps
+  kind: StatefulSet
+  behavior: replace

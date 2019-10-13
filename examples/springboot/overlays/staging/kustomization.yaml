@@ -8,4 +8,5 @@ configMapGenerator:
     - application.properties
   literals:
     - foo=bar
-  env: staging.env
+  envs:
+    - staging.env

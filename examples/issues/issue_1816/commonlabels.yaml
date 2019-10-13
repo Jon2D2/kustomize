@@ -1,0 +1,17 @@
+commonLabels:
+- path: spec/selector
+  version: v1
+  kind: Service
+  behavior: remove
+- path: spec/jobTemplate/spec/selector/matchLabels
+  group: batch
+  kind: CronJob
+  behavior: remove
+- path: spec/jobTemplate/metadata/labels
+  group: batch
+  kind: CronJob
+  behavior: remove
+- path: spec/jobTemplate/spec/template/metadata/labels
+  group: batch
+  kind: CronJob
+  behavior: remove

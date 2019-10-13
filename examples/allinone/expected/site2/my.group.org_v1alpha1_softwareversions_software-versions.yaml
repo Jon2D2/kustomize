@@ -1,0 +1,25 @@
+apiVersion: my.group.org/v1alpha1
+kind: SoftwareVersions
+metadata:
+  name: software-versions
+spec:
+  charts:
+    mysql:
+      location: https://github.com/helm/charts/blob/
+      reference: latest
+      subpath: mysql
+      type: git
+    wordpress:
+      location: https://github.com/helm/charts/blob/
+      reference: latest
+      subpath: wordpress
+      type: git
+  images:
+    mysql:
+      registory: docker.io
+      repository: mysql
+      tag: "5.6"
+    wordpress:
+      registory: docker.io
+      repository: wordpress
+      tag: 4.8-apache

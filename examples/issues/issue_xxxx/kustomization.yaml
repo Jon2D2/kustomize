@@ -1,0 +1,32 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+commonLabels:
+  app.kubernetes.io/managed-by: kustomize
+  managed-by: kustomize
+
+resources:
+  - dev
+
+vars:
+- fieldref:
+    fieldPath: data.GOOGLE_PROJECT_ID
+  name: GOOGLE_PROJECT_ID
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: cluster-properties
+- fieldref:
+    fieldPath: data.CLUSTER_NAME
+  name: CLUSTER_NAME
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: cluster-properties
+
+configMapGenerator:
+- env: properties/cluster.properties
+  name: cluster-properties
+  namespace: kustomize
+

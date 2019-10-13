@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  labels:
+    app: helloworld
+  name: helloworld
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helloworld
+  strategy:
+    blueGreen:
+      activeService: helloworld-svc-active
+      autoPromotionEnabled: false
+      previewService: helloworld-svc-preview
+  template:
+    metadata:
+      labels:
+        app: helloworld
+    spec:
+      containers:
+      - env:
+        - name: DEPLOY_VERSION
+          value: orange

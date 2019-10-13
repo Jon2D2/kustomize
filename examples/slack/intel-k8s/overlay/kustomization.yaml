@@ -1,0 +1,13 @@
+resources:
+- ../base
+- ./values.yaml
+
+patchesStrategicMerge:
+- intelfga-patch.yaml
+
+patchesJson6902:
+- target:
+    version: v1
+    kind: Pod
+    name: dpdkqatuio
+  path: dpdk-patch.yaml

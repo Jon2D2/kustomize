@@ -1,0 +1,4 @@
+resources:
+- ../component1
+
+namePrefix: app1-

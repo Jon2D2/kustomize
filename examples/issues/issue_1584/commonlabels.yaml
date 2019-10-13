@@ -1,0 +1,6 @@
+commonLabels:
+  - path: spec/egress/to/podSelector/matchLabels
+    skip: true
+    group: networking.k8s.io
+    version: v1
+    kind: NetworkPolicy

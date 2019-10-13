@@ -1,0 +1,21 @@
+apiVersion: kubeflow.org/v1beta2
+kind: TFJob
+metadata:
+  name: training-name
+spec:
+  tfReplicaSpecs:
+    Chief:
+      replicas: 1
+      template:
+        spec:
+          containers:
+          - name: tensorflow
+            command:
+            - /usr/bin/python
+            - /opt/model.py
+            env:
+            - name: batchSize
+              value: $(batchSize)
+            image: training-image
+            workingDir: /opt
+          restartPolicy: OnFailure

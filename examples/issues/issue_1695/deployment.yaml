@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: group
+spec:
+  selector:
+    matchLabels:
+      app: group
+  template:
+    metadata:
+      labels:
+        app: group
+    spec:
+      containers:
+        - name: group
+          image: image
+          envFrom:
+            - secretRef:
+                name: group

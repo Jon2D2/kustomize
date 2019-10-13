@@ -1,0 +1,21 @@
+bases:
+  # - overlays/k8s
+  - overlays/consul
+
+nameSuffix: -v1
+commonLabels:
+  app.kubernetes.io/version: v1
+
+images:
+  - name: postgres
+    newTag: latest
+  - name: microhq/micro
+    newTag: kubernetes
+  - name: xmlking/account-api
+    newTag: v0.1.0-118-g21f8a30
+  - name: xmlking/account-srv
+    newTag: v0.1.0-118-g21f8a30
+  - name: xmlking/emailer-srv
+    newTag: v0.1.0-118-g21f8a30
+  - name: xmlking/greeter-srv
+    newTag: v0.1.0-118-g21f8a30

@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: KubectlApplyOrderTransformer
+metadata:
+  name: kubectlapplyordertransformer
+kindorder:
+- Namespace
+- CustomResourceDefinition
+- ServiceAccount
+- ClusterRole
+- RoleBinding
+- ClusterRoleBinding
+- ConfigMap
+- Service
+- Deployment
+- CronJob
+- ValidatingWebhookConfiguration
+- APIService
+- Job
+- Certificate
+- ClusterIssuer
+- Issuer

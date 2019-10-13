@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: openssl-qat-engine
+spec:
+  containers:
+  - args:
+    - while true; do sleep 300000; done;
+    command:
+    - /bin/bash
+    - -c
+    - --
+    image: docker.io/library/openssl-qat-engine:devel
+    imagePullPolicy: Never
+    name: openssl-qat-engine
+    resources:
+      limits:
+        qat.intel.com/generic: "1"
+      requests:
+        qat.intel.com/generic: "1"
+    volumeMounts:
+    - mountPath: /dev
+      name: dev-mount
+    - mountPath: /etc/c6xxvf_dev0.conf
+      name: dev0
+  runtimeClassName: kata-containers
+  volumes:
+  - hostPath:
+      path: /dev
+    name: dev-mount
+  - hostPath:
+      path: /etc/c6xxvf_dev0.conf
+    name: dev0

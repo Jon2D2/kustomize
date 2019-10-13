@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dpdkqatuio
+spec:
+  containers:
+  - args:
+    - while true; do sleep 300000; done;
+    command:
+    - /bin/bash
+    - -c
+    - --
+    image: crypto-perf:devel
+    imagePullPolicy: IfNotPresent
+    name: dpdkcontainer
+    resources:
+      limits:
+        cpu: "3"
+        hugepages-2Mi: 1Gi
+        memory: 64Mi
+        qat.intel.com/generic: "4"
+      requests:
+        cpu: "3"
+        hugepages-2Mi: 1Gi
+        memory: 128Mi
+        qat.intel.com/generic: "4"
+    securityContext:
+      capabilities:
+        add:
+        - IPC_LOCK
+    volumeMounts:
+    - mountPath: /dev/hugepages
+      name: hugepage
+  volumes:
+  - emptyDir:
+      medium: HugePages
+    name: hugepage

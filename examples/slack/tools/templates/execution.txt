@@ -1,0 +1,7 @@
+
+<!-- @build @test -->
+```bash
+mkdir ${DEMO_HOME}/actual
+kustomize build $DEMO_HOME -o ${DEMO_HOME}/actual
+```
+

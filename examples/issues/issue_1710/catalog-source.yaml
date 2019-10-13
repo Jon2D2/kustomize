@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: foocorp-operators-registry
+spec:
+  displayName: Foo
+  publisher: Foo Corp.
+  sourceType: grpc
+  image: docker-registry.default.svc:/foocorp/foocorp-operators-registry:0.0.1

@@ -1,0 +1,9 @@
+resources:
+- job.yaml
+
+vars:
+- name: BACKEND_SERVICE_NAME
+  objref:
+    kind: Job
+    name: nginx-job
+    apiVersion: batch/v1

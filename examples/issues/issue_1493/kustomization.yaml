@@ -1,0 +1,14 @@
+resources:
+- dep1.yaml
+- dep2.yaml
+- dep3.yaml
+
+
+patches:
+- path: jsonpatches/first-container-pull-policy-to-always.yaml
+  target:
+    kind: Deployment
+- path: jsonpatches/second-container-pull-policy-to-always.yaml
+  target:
+    kind: Deployment
+    name: this|that

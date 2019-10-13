@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    jobgroup: intelfpga-demo
+  name: intelfpga-demo-job
+spec:
+  template:
+    metadata:
+      labels:
+        jobgroup: intelfpga-demo
+    spec:
+      containers:
+      - image: ubuntu-demo-opae:devel
+        imagePullPolicy: IfNotPresent
+        name: intelfpga-demo-job-1
+        resources:
+          limits:
+            cpu: 1
+            fpga.intel.com/af-d8424dc4a4a3c413f89e433683f9040b: 1
+            hugepages-2Mi: 10Mi
+        securityContext:
+          capabilities:
+            add:
+            - IPC_LOCK
+      restartPolicy: Never

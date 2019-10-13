@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-client-provisioner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      containers:
+      - env:
+        - name: PROVISIONER_NAME
+          value: fuseim.pri/ifs
+        - name: NFS_SERVER
+          value: 127.0.0.1
+        - name: NFS_PATH
+          value: /var/nfs
+        image: quay.io/external_storage/nfs-client-provisioner:latest
+        name: nfs-client-provisioner
+        volumeMounts:
+        - mountPath: /persistentvolumes
+          name: nfs-client-root
+      serviceAccountName: nfs-client-provisioner
+      volumes:
+      - name: nfs-client-root
+        nfs:
+          path: /var/nfs
+          server: 127.0.0.1

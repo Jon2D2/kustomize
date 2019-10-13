@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- resources.yaml
+configMapGenerator:
+- name: demo-configmap-parameters
+  envs:
+  - params.env
+generatorOptions:
+  disableNameSuffixHash: true
+vars:
+- name: foo
+  objref:
+    kind: ConfigMap
+    name: demo-configmap-parameters
+    apiVersion: v1
+  fieldref:
+    fieldpath: data.foo
+- name: bar
+  objref:
+    kind: ConfigMap
+    name: demo-configmap-parameters
+    apiVersion: v1
+  fieldref:
+    fieldpath: data.bar
+configurations:
+- params.yaml

@@ -1,0 +1,5 @@
+apiVersion: someteam.example.com/v1
+kind: SecretsFromDatabase
+metadata:
+  name: secretsfromdatabase
+fieldSpecs:

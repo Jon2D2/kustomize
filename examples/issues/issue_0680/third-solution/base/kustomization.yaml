@@ -1,0 +1,7 @@
+resources:
+- values.yaml
+  
+configMapGenerator:
+- name: myJavaServerProps
+  files:
+  - app.properties

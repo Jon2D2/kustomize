@@ -1,0 +1,6 @@
+commonLabels:
+- path: spec/selector/matchLabels
+  create: true
+  group: app.k8s.io
+  version: v1beta1
+  kind: Application

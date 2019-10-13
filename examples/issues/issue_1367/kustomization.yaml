@@ -1,0 +1,7 @@
+# nameprefix: pfx-
+# namesuffix: -sfx
+
+resources:
+- secret.yaml
+- ingress.yaml
+- service.yaml

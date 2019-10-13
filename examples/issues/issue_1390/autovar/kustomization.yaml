@@ -1,0 +1,5 @@
+namePrefix: pfx-
+
+resources:
+- deployment.yaml
+- secret.yaml

@@ -1,0 +1,6 @@
+kind: AnimalPark
+metadata:
+  name: sandiego
+spec:
+  gorillaRef:
+    name: ursus

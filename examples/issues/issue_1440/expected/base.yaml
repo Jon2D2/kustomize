@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - args: []
+        command: []
+        image: container-image
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+        name: main
+        ports:
+        - containerPort: 8000
+          name: http

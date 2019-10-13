@@ -1,0 +1,60 @@
+namespace: default
+commonLabels:
+  app.kubernetes.io/part-of: micro-starter-kit
+  app.kubernetes.io/managed-by: kustomize
+commonAnnotations:
+  org: acmeCorporation
+
+bases:
+  - gateway
+  # - postgres
+  - account-api
+  - account-srv
+  - emailer-srv
+  - greeter-srv
+
+configurations:
+  - kconfig.yaml
+
+configMapGenerator:
+  # - name: env-vars-common
+  - name: env-vars
+    behavior: merge
+    literals:
+      - MICRO_SERVER_ADDRESS=0.0.0.0:8080
+      - MICRO_BROKER_ADDRESS=0.0.0.0:10001
+      - APP_ENV=development
+      - CONFIG_DIR=/config
+      - CONFIG_FILE=config.yaml
+      - MICRO_REGISTRY=mdns
+
+secretGenerator:
+  - name: secrets
+    literals:
+      - DATABASE_PASSWORD=fake
+
+# patches:
+#   - patch: |-
+#       - op: replace
+#         path: /some/existing/replicas
+#         value: new value
+
+# secretGenerator:
+# - name: app-tls
+#   files:
+#     - secret/tls.cert
+#     - secret/tls.key
+
+images:
+  - name: postgres
+    newTag: latest
+  - name: microhq/micro
+    newTag: kubernetes
+  - name: xmlking/account-api
+    newTag: latest
+  - name: xmlking/account-srv
+    newTag: latest
+  - name: xmlking/emailer-srv
+    newTag: latest
+  - name: xmlking/greeter-srv
+    newTag: latest

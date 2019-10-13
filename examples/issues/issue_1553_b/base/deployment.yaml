@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    spec:
+      containers:
+      - name: sentry
+        imagePullPolicy: Always
+        image: sentryimage:1.0
+        env:
+          - name: SENTRY_DNS
+            valueFrom:
+              secretKeyRef:
+                name: core
+                key: sentryDNS

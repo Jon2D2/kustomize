@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: helloworld
+  name: helloworld
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helloworld
+  strategy:
+    blueGreen: $(Values.file1.spec.blueGreen)
+  template:
+    metadata:
+      labels:
+        app: helloworld
+    spec:
+      containers:
+      - env:
+        - name: DEPLOY_VERSION
+          value: $(DEPLOYMENT_COLOR)
+        image: someplage/hellopy
+        imagePullPolicy: Always

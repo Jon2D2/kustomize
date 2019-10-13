@@ -1,0 +1,13 @@
+apiVersion: my.group.org/v1alpha1
+kind: CommonAddresses
+metadata:
+  name: dev-common-addresses
+spec:
+  dns:
+    cluster_domain: cluster.local
+    ingress_domain: dev.my.group.org
+    service_ip: 10.96.0.10
+    upstream_servers:
+    - 8.8.8.8
+    - 8.8.4.4
+    - 10.0.2.3

@@ -1,0 +1,17 @@
+resources:
+- elasticsearch-dev-service.yaml
+vars:
+- name: elasticsearch-dev-service-name
+  objref:
+    kind: Service
+    name: elasticsearch
+    apiVersion: v1
+  fieldref:
+    fieldpath: metadata.name
+- name: elasticsearch-dev-protocol
+  objref:
+    kind: Service
+    name: elasticsearch
+    apiVersion: v1
+  fieldref:
+    fieldpath: spec.ports[0].protocol

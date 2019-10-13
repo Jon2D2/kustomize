@@ -1,0 +1,3 @@
+# nameprefix: p1-
+resources:
+  - ../../base

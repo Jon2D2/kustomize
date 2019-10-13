@@ -1,0 +1,23 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  labels:
+    app: helloworld
+  name: helloworld
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helloworld
+  strategy:
+    blueGreen: $(Values.file1.spec.blueGreen)
+  template:
+    metadata:
+      labels:
+        app: helloworld
+    spec:
+      containers:
+      - env:
+        - name: DEPLOY_VERSION
+          value: $(DEPLOYMENT_COLOR)

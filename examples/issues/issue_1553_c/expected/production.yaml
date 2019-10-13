@@ -1,0 +1,96 @@
+apiVersion: v1
+data:
+  mailgunAPIKey: bWFpbGd1bkFQSUtleVN0YWdpbmdWYWx1ZQ==
+  password: cGFzc3dvcmRTdGFnaW5nVmFsdWU=
+  postgreSQLPassword: cG9zdGdyZVNRTFBhc3N3b3JkU3RhZ2luZ1ZhbHVl
+  sentryDNS: c2VudHJ5RE5TU3RhZ2luZ1ZhbHVl
+  stripeSecretKey: c3RyaXBlU2VjcmV0S2V5U3RhZ2luZ1ZhbHVl
+  username: dXNlck5hbWVTdGFnaW5nVmFsdWU=
+kind: Secret
+metadata:
+  annotations: {}
+  labels:
+    app: sentry
+    env: production
+  name: core-tk6tmthbgm
+type: Opaque
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sentry
+    env: production
+  name: core
+spec:
+  selector:
+    matchLabels:
+      app: sentry
+      env: production
+  template:
+    metadata:
+      labels:
+        app: sentry
+        env: production
+    spec:
+      containers:
+      - env:
+        - name: NODE_ENV
+          value: production
+        - name: SENTRY_ENV
+          value: production
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: stripeSecretKey
+              name: core-tk6tmthbgm
+        - name: MG_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: mailgunAPIKey
+              name: core-tk6tmthbgm
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgreSQLPassword
+              name: core-tk6tmthbgm
+        image: sentryimage:1.0
+        imagePullPolicy: Always
+        name: sentry
+        readinessProbe:
+          exec:
+            command:
+            - /opt/sentryenv/bin/zkOK.sh
+          initialDelaySeconds: 10
+          periodSeconds: 22
+          timeoutSeconds: 2
+---
+apiVersion: kustomize.config.k8s.io/v1
+kind: Values
+metadata:
+  labels:
+    app: sentry
+    env: production
+  name: nodeenv
+spec:
+  args:
+    param1: defaultvalue
+    param2: defaultvalue
+  env: production
+---
+apiVersion: kustomize.config.k8s.io/v1
+kind: Values
+metadata:
+  labels:
+    app: sentry
+    env: production
+  name: sentryenv
+spec:
+  env: production
+  readinessProbe:
+    exec:
+      command:
+      - /opt/sentryenv/bin/zkOK.sh
+    initialDelaySeconds: 10
+    periodSeconds: 22
+    timeoutSeconds: 2

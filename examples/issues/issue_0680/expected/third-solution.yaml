@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  app.properties: |
+    foo=production-foo-value
+    bar=production-foo-value
+kind: ConfigMap
+metadata:
+  name: myJavaServerProps-7m6dhd66bg
+---
+apiVersion: kustomize.config.k8s.io/v1
+kind: Values
+metadata:
+  name: file1
+spec:
+  bar: production-foo-value
+  foo: production-foo-value

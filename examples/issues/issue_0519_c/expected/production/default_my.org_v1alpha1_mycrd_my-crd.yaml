@@ -1,0 +1,7 @@
+apiVersion: my.org/v1alpha1
+kind: MyCRD
+metadata:
+  name: my-crd
+spec:
+  replica: 123
+  simpletext: some simple text

@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cstmr-zvyjvn35b81rkfkr87fznrpanw5op9x5yo0
+---
+apiVersion: v1
+data:
+  settings.json: |
+    {
+      "skinName":"colibris",
+      "title":"Etherpad on Kubernetes w/ MySQL",
+      "dbType": "${ETHERPAD_DB_TYPE:mysql}",
+      "dbSettings": {
+        "database": "${ETHERPAD_DB_DATABASE}",
+        "host": "${ETHERPAD_DB_HOST}",
+        "password": "${ETHERPAD_DB_PASSWORD}",
+        "user": "${ETHERPAD_DB_USER}"
+      }
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+  name: ai-w613mmojuo0qqir4pvc1l4rsr96mm6110ymetherpad
+  namespace: cstmr-zvyjvn35b81rkfkr87fznrpanw5op9x5yo0
+---
+apiVersion: v1
+data:
+  init.sql: |
+    create database `etherpad_lite_db`;
+    use `etherpad_lite_db`;
+
+    CREATE TABLE `store` (
+      `key` varchar(100) COLLATE utf8mb4_bin NOT NULL DEFAULT '',
+      `value` longtext COLLATE utf8mb4_bin NOT NULL,
+      PRIMARY KEY (`key`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+kind: ConfigMap
+metadata:
+  labels:
+    k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+  name: ai-w613mmojuo0qqir4pvc1l4rsr96mm6110ymetherpad-mysql-init
+  namespace: cstmr-zvyjvn35b81rkfkr87fznrpanw5op9x5yo0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+  name: ai-w613mmojuo0qqir4pvc1l4rsr96mm6110ymetherpad
+  namespace: cstmr-zvyjvn35b81rkfkr87fznrpanw5op9x5yo0
+spec:
+  ports:
+  - name: web
+    port: 80
+    targetPort: web
+  selector:
+    app: etherpad
+    k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+  name: ai-w613mmojuo0qqir4pvc1l4rsr96mm6110ymetherpad
+  namespace: cstmr-zvyjvn35b81rkfkr87fznrpanw5op9x5yo0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etherpad
+      k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+  template:
+    metadata:
+      labels:
+        app: etherpad
+        k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+    spec:
+      containers:
+      - env:
+        - name: ETHERPAD_DB_TYPE
+          value: mysql
+        - name: ETHERPAD_DB_HOST
+          value: ai-w613mmojuo0qqir4pvc1l4rsr96mm6110ymetherpad-mysql
+        - name: ETHERPAD_DB_DATABASE
+          value: etherpad_lite_db
+        - name: ETHERPAD_DB_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: etherpad-mysql-auth
+        - name: ETHERPAD_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: etherpad-mysql-auth
+        image: etherpad/etherpad:latest
+        name: etherpad
+        ports:
+        - containerPort: 9001
+          name: web
+        volumeMounts:
+        - mountPath: /opt/etherpad-lite/settings.json
+          name: config
+          subPath: settings.json
+        - mountPath: /opt/etherpad/settings.json
+          name: config
+          subPath: settings.json
+      volumes:
+      - configMap:
+          name: ai-w613mmojuo0qqir4pvc1l4rsr96mm6110ymetherpad
+        name: config
+---
+apiVersion: kubedb.com/v1alpha1
+kind: MySQL
+metadata:
+  labels:
+    k8s.permanent.cloud/appInstallation.id: 45170c85-ec8b-4008-9d57-4524aa16f93f
+  name: ai-w613mmojuo0qqir4pvc1l4rsr96mm6110ymetherpad-mysql
+  namespace: cstmr-zvyjvn35b81rkfkr87fznrpanw5op9x5yo0
+spec:
+  init:
+    scriptSource:
+      configMap:
+        name: etherpad-mysql-init
+  storage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: default
+  storageType: Durable
+  terminationPolicy: WipeOut
+  version: 5.7.25

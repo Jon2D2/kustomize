@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch
+  namespace: test
+spec:
+  template:
+    spec:
+      containers:
+        - name: elasticsearch
+          env:
+            - name: DISCOVERY_SERVICE
+              value: "$(elasticsearch-test-service-name).monitoring.svc.cluster.local"
+            - name: DISCOVERY_PROTOCOL
+              value: "$(elasticsearch-test-protocol)"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: test
+spec:
+  ports:
+    - name: transport
+      port: 9300
+      protocol: UDP
+  clusterIP: None

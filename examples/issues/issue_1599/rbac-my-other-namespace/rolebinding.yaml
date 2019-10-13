@@ -1,0 +1,21 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-rolebinding
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: will-be-replaced-because-created-automatically-with-the-namespace
+  - kind: ServiceAccount
+    name: my-other-namespace-sa
+  - kind: ServiceAccount
+    name: my-namespace-sa
+    namespace: my-namespace
+  - kind: User
+    apiGroup: rbac.authorization.k8s.io
+    name: user-1
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: my-role

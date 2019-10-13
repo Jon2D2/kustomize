@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: puppetserver
+  name: stagingpfx-puppetserver
+  namespace: stagingns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puppetserver
+  template:
+    metadata:
+      labels:
+        app: puppetserver
+    spec:
+      containers:
+      - image: hack4easy/kubesim_health-amd64:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8081
+        name: main
+        ports:
+        - containerPort: 8081
+          name: pupperserver
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8081
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: stagingpfx-puppetserver
+  namespace: stagingns
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: stagingpfx-puppetserver
+  updatePolicy:
+    updateMode: false

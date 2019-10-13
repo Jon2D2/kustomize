@@ -1,0 +1,11 @@
+- op: add
+  path: /rules/0
+  value:
+    apiGroups:
+      - extensions
+    resourceNames:
+      - privileged
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use

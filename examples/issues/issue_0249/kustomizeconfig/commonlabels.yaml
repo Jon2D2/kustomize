@@ -1,0 +1,5 @@
+commonLabels:
+- path: spec/selector
+  kind: Service
+  version: v1
+  behavior: remove

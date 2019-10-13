@@ -1,0 +1,9 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: proxy-config
+    files:
+      - config/dhparam.pem
+      - config/chained.crt

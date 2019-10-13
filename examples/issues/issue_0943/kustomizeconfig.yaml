@@ -1,0 +1,6 @@
+commonLabels:
+- path: spec/template/spec/affinity/podAntiAffinity/requiredDuringSchedulingIgnoredDuringExecution/labelSelector/matchLabels
+  create: true
+  group: apps
+  kind: Deployment
+  version: v1

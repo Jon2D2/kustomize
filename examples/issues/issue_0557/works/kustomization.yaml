@@ -1,0 +1,4 @@
+# These bases work fine
+resources:
+- ./overlay_1
+- ./overlay_2

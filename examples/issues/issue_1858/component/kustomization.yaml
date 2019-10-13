@@ -1,0 +1,4 @@
+resources:
+  - prod
+  - canary
+  - ingress.yaml

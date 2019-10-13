@@ -1,0 +1,4 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cstmr-zvyjvn35b81rkfkr87fznrpanw5op9x5yo0

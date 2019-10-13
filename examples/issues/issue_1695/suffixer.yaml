@@ -1,0 +1,10 @@
+apiVersion: builtin
+kind: PrefixSuffixTransformer
+metadata:
+  name: suffix
+suffix: -service
+fieldSpecs:
+- kind: Secret
+  path: metadata/name
+- kind: Deployment
+  path: metadata/name

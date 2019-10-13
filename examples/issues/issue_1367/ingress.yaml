@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    ingress.kubernetes.io/auth-secret: auth-secret
+    nginx.ingress.kubernetes.io/auth-secret: auth-secret
+    nginx.ingress.kubernetes.io/auth-tls-secret: $(Secret.auth-tls-secret.metadata.namespace)/$(Secret.auth-tls-secret.metadata.name)
+spec:
+  rules:
+  - host: CNAME.DOMAIN.COM
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: service
+          servicePort: 80

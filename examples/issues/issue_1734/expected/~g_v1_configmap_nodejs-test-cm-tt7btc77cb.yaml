@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  branch: develop
+  build: "20191025"
+  external_ip: 10.0.0.3
+  external_port: "3000"
+kind: ConfigMap
+metadata:
+  name: nodejs-test-cm-tt7btc77cb

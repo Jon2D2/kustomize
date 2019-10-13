@@ -1,0 +1,15 @@
+
+resources:
+- ../../base
+
+patchesStrategicMerge:
+- ./values.yaml
+
+# current kustomize version calls for adding
+# transformers here. It does not work because
+# the filter applied here interferes with
+# variables resolution. Such a filtering has
+# to be apply after the variables are resolved,
+#
+# transformers:
+# - kubectlapplyordertransformer.yaml

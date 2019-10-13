@@ -1,0 +1,14 @@
+configMapGenerator:
+- name: a-config-map
+  envs:
+  - a.properties
+- name: b-config-map
+  envs:
+  - b.properties
+
+# generatorOptions:
+#   disableNameSuffixHash: true
+
+patchesStrategicMerge:
+- patch-a.yaml
+- patch-b.yaml

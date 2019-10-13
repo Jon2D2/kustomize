@@ -1,0 +1,24 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: data
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+  volumes:
+    - name: data
+      persistentVolumeClaim:
+        claimName: data

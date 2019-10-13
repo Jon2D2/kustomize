@@ -1,0 +1,7 @@
+commonLabels:
+- path: spec/template/spec/affinity/podAffinity/requiredDuringSchedulingIgnoredDuringExecution/labelSelector/matchLabels
+  group: apps
+  version: v1
+  kind: Deployment
+  skip: true 
+  # behavior: drop

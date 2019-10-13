@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: another-deployment
+spec:
+  template:
+    spec:
+      containers:
+        - name: another-test
+          image: another-test
+          env:
+            - name: MY_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: key
+

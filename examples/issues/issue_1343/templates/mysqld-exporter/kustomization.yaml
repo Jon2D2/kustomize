@@ -1,0 +1,13 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+commonLabels:
+  app.kubernetes.io/component: prometheus-exporter
+
+configurations:
+- commonlabels.yaml
+
+resources:
+- resources/mysqld-exporter-deployment.yaml
+- resources/mysqld-exporter-service.yaml
+- resources/mysqld-exporter-serviceMonitor.yaml

@@ -1,0 +1,20 @@
+apiVersion: my.group.org/v1alpha1
+kind: Chart
+metadata:
+  name: dev-mysql
+spec:
+  source:
+    location: https://github.com/helm/charts/blob/
+    reference: latest
+    subpath: mysql
+    type: git
+  values:
+    images:
+      registory: docker.io
+      repository: mysql
+      tag: "5.7"
+    labels:
+      app: mysql
+    pod:
+      replicas:
+        api: 1

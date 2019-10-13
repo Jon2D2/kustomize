@@ -1,0 +1,12 @@
+resources:
+- ../../base
+namePrefix: production-
+patchesStrategicMerge:
+- snowball-webclient-certificate-patch.yaml
+- snowball-webclient-ingress-patch.yaml
+
+images:
+- name: gcr.io/myapp/snowball-webclient
+  newTag: 2.0.0
+
+

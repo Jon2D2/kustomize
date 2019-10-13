@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: usingpatch
+            args:
+            - /bin/sh
+            - -c
+            - date; echo hello from Instance1 using strategiMergePatch

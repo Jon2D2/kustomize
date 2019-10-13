@@ -1,0 +1,7 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: puppetserver
+spec:
+  maxReplicas: 6
+  minReplicas: 3

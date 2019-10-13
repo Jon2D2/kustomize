@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy1
+spec:
+  template:
+    spec:
+      containers:
+      - $patch: delete
+        name: container2
+      - $patch: delete
+        name: container3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy2
+spec:
+  template:
+    spec:
+      containers:
+      - $patch: delete
+        name: container2

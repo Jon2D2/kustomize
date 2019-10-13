@@ -1,0 +1,6 @@
+resources:
+- deployment.yaml
+- role.yaml
+- service.yaml
+transformers:
+- prefixer.yaml

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod
+spec:
+  volumes:
+    - name: config-bar
+      configMap:
+        # From a layering standpoint, overlay expect
+        # base to have added the suffix. If you try
+        # to add the suffix in the overlay, don't forget
+        # to remove the suffix here.
+        name: bar-suffix

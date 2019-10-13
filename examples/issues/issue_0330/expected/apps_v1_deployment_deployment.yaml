@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    common: label
+  name: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      common: label
+  template:
+    metadata:
+      labels:
+        app: masterdata
+        common: label
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: memcached
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - name: deployment

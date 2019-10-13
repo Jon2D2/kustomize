@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch
+spec:
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/app
+                      operator: In
+                      values:
+                        - "$(elasticsearch-master-statefulset-app-label)"
+                    - key: app.kubernetes.io/instance
+                      operator: In
+                      values:
+                        - "$(elasticsearch-master-statefulset-instance-label)"
+                    - key: app.kubernetes.io/component
+                      operator: In
+                      values:
+                        - "$(elasticsearch-master-statefulset-component-label)"
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: elasticsearch
+          env:
+            - name: DISCOVERY_SERVICE
+              value: "$(elasticsearch-master-service-name).monitoring.svc.cluster.local"
+            - name: ES_JAVA_OPTS
+              value: "-Xms2048m -Xmx2048m"
+            - name: NODE_DATA
+              value: "false"
+            - name: NODE_INGEST
+              value: "false"
+            - name: NODE_MASTER
+              value: "true"
+            - name: POST_TERM_WAIT
+              value: "15"
+          imagePullPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                command: [ "/usr/bin/bash", "-c", "sleep 60" ]
+          ports:
+            - containerPort: 9300
+              name: transport
+          resources:
+            limits:
+              memory: 4096Mi
+            requests:
+              memory: 4096Mi
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - emptyDir:
+            medium: ""
+          name: "storage"

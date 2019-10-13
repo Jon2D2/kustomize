@@ -1,0 +1,19 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: orgname
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: orgname
+rules:
+  resourceNames:
+  - orgname
+  resources:
+  - persistentvolumes
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: orgname

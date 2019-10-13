@@ -1,0 +1,13 @@
+kind: Giraffe
+metadata:
+  name: april
+spec:
+  diet: mimosa
+  location: NE
+---
+kind: Giraffe
+metadata:
+  name: may
+spec:
+  diet: acacia
+  location: SE

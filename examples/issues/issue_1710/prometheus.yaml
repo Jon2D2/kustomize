@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+  labels:
+    prometheus: k8s
+spec:
+  replicas: 2
+  serviceAccountName: prometheus-k8s
+  securityContext: {}
+  serviceMonitorSelector: {}
+  ruleSelector: {}
+  alerting:
+    alertmanagers:
+    - namespace: IWANTTOREPLACETHIS
+      name: alertmanager
+      port: alertmanager

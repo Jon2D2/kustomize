@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1
+kind: Values
+metadata:
+  name: file1
+spec:
+  Release:
+    Namespace: name_of_the_namespace_we_deploy_into
+  url: a_configured_host

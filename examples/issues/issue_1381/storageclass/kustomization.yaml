@@ -1,0 +1,7 @@
+nameprefix: storageclass-
+
+configurations:
+- kustomizeconfig.yaml
+
+resources:
+- storageclass.yaml

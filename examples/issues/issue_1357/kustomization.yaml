@@ -1,0 +1,6 @@
+resources:
+- pod.yaml
+images:
+- name: busybox
+  newName: alpine
+  digest: sha256:2222222222222222

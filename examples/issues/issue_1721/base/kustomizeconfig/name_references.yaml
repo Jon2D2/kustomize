@@ -1,0 +1,6 @@
+nameReference:
+- kind: Ingress
+  group: networking.k8s.io
+  fieldSpecs:
+  - path: spec/metrics/object/describedObject/name
+    kind: HorizontalPodAutoscaler

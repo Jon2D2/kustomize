@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core
+spec:
+  template:
+    spec:
+      containers:
+      - name: sentry
+        imagePullPolicy: Always
+        image: sentryimage:1.0
+        readinessProbe: $(Values.sentryenv.spec.readinessProbe)
+        env:
+        - name: NODE_ENV
+          value: $(Values.nodeenv.spec.env)
+        - name: SENTRY_ENV
+          value: $(Values.sentryenv.spec.env)
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $(Secret.core.metadata.name)
+              key: stripeSecretKey
+        - name: MG_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: $(Secret.core.metadata.name)
+              key: mailgunAPIKey
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: $(Secret.core.metadata.name)
+              key: postgreSQLPassword

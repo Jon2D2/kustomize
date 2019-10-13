@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dns
+  namespace: patch
+spec:
+  template:
+    spec:
+      dnsPolicy: ClusterFirst

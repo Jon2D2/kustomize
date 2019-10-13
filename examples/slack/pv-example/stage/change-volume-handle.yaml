@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mms-app-efs
+  namespace: mms-app
+spec:
+  cis:
+    volumeHandle: fs-stagestagestage

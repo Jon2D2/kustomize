@@ -1,0 +1,5 @@
+#Note: uncomment namePrefix to get myapp composition to work
+
+resources:
+- ../instance1
+- ../instance2

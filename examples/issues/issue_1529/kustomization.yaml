@@ -1,0 +1,13 @@
+
+resources:
+- ./cm.yaml
+- ./deployment.yaml
+
+vars:
+  - name: KUSTOMIZE_MYCONFIGMAP_VARIABLE
+    objref:
+      kind: ConfigMap
+      name: myConfigMap
+      apiVersion: v1
+    fieldref:
+      fieldpath: data[another.variable.with.dots.in.it]

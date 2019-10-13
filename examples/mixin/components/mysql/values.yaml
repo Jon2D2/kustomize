@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Values
+metadata:
+  name: mysql
+  namespace: build
+spec:
+  port: 8002
+  targetPort: 9002

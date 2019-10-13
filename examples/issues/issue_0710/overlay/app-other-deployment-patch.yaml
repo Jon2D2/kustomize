@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  template:
+    spec:
+      containers:
+        - name: app
+          #[REDACTED]
+          volumeMounts:
+            - name: config-volume
+              mountPath: "/path/to/file"
+      volumes:
+        - name: config-volume
+          configMap:
+            name: config

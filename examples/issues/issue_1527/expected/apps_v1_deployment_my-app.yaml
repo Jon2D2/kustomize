@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: my-app
+  name: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: localhost/my-app:latest
+        name: my-app
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /data/two
+          name: volume-two
+        - mountPath: /data/one
+          name: volume-one
+      volumes:
+      - configMap:
+          items:
+          - key: key-two
+            path: path_two
+          name: cm-two
+        name: volume-two
+      - configMap:
+          items:
+          - key: key-one
+            path: path_one
+          name: cm-one
+        name: volume-one

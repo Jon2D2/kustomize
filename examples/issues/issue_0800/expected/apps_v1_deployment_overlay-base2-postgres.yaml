@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: postgres
+  name: overlay-base2-postgres
+spec:
+  selector:
+    matchLabels:
+      component: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        component: postgres
+    spec:
+      containers:
+      - image: postgres
+        imagePullPolicy: IfNotPresent
+        name: postgres
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - mountPath: /var/lib/postgresql
+          name: data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: overlay-base2-postgres

@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app: centraldashboard
+
+configMapGenerator:
+- envs:
+  - params.env
+  name: parameters
+
+vars:
+- fieldref:
+    fieldPath: data.registry
+  name: registry
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: parameters
+- fieldref:
+    fieldPath: data.centraldashboardImageName
+  name: centraldashboardImageName
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: parameters
+- fieldref:
+    fieldPath: data.centraldashboardImageTag
+  name: centraldashboardImageTag
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: parameters
+
+images:
+- name: defaultCentralDashboardImageName
+  newName: $(registry)/$(centraldashboardImageName)
+  newTag: $(centraldashboardImageTag)
+
+resources:
+- deployment.yaml
+
+configurations:
+- kustomizeconfig.yaml
+

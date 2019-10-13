@@ -1,0 +1,8 @@
+resources:
+- ../templates
+- values.yaml
+
+patchesStrategicMerge:
+- patch.yaml
+
+# namePrefix: p2-

@@ -1,0 +1,4 @@
+namespace: foo
+resources:
+  # - ../../environment
+  - manifests/ingress.yaml

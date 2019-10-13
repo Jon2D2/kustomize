@@ -1,0 +1,10 @@
+nameReference:
+- kind: Secret
+  version: v1
+  fieldSpecs:
+  - path: spec/flexVolume/secretRef/name
+    kind: PersistentVolume
+
+varReference:
+- path: spec/flexVolume/options/container
+  kind: PersistentVolume

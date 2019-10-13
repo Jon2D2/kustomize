@@ -1,0 +1,4 @@
+resources:
+- ../b
+namePrefix: d-
+nameSuffix: -suffixD

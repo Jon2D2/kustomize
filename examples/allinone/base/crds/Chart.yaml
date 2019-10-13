@@ -1,0 +1,297 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: charts.my.group.org
+spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.actual_state
+    description: State
+    name: State
+    type: string
+  - JSONPath: .spec.target_state
+    description: Target State
+    name: Target State
+    type: string
+  - JSONPath: .status.satisfied
+    description: Satisfied
+    name: Satisfied
+    type: boolean
+  group: my.group.org
+  names:
+    kind: Chart
+    plural: charts
+    shortNames:
+    - act
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            source:
+              description: provide a path to a ``git repo``, ``local dir``, or ``tarball
+                url`` chart
+              properties:
+                location:
+                  description: '``url`` or ``path`` to the chart''s parent directory'
+                  type: string
+                reference:
+                  description: (optional) branch, commit, or reference in the repo
+                    (``master`` if not specified)
+                  type: string
+                subpath:
+                  description: (optional) relative path to target chart from parent
+                    (``.`` if not specified)
+                  type: string
+                type:
+                  description: 'source to build the chart: ``git``, ``local``, or
+                    ``tar``'
+                  type: string
+              required:
+              - location
+              - subpath
+              - type
+              type: object
+            values:
+              description: override any default values in the charts
+              properties:
+                endpoints:
+                  description: 'endpoints contains tbd. JEB: Would have been too consistent.
+                    Different structures are used depending on the direction of the
+                    wind. Endpoints *map[string]AVEndpoint `json:"endpoints,omitempty"`'
+                  properties:
+                    identity:
+                      description: identity contains tbd
+                      properties:
+                        auth:
+                          additionalProperties:
+                            properties:
+                              bind:
+                                description: bind contains tbd
+                                type: string
+                              database:
+                                description: database contains tbd
+                                type: string
+                              email:
+                                description: email contains tbd
+                                type: string
+                              password:
+                                description: password contains tbd
+                                type: string
+                              role:
+                                description: role contains tbd
+                                type: string
+                              tls:
+                                description: tls contains tbd
+                                properties:
+                                  ca:
+                                    description: ca contains tbd
+                                    type: string
+                                  client:
+                                    description: client contains tbd
+                                    properties:
+                                      ca:
+                                        description: ca contains tbd
+                                        type: string
+                                    type: object
+                                  crt:
+                                    description: crt contains tbd
+                                    type: string
+                                  key:
+                                    description: key contains tbd
+                                    type: string
+                                  peer:
+                                    description: peer contains tbd
+                                    properties:
+                                      ca:
+                                        description: ca contains tbd
+                                        type: string
+                                    type: object
+                                type: object
+                              tmpurlkey:
+                                description: tmpurlkey contains tbd
+                                type: string
+                              username:
+                                description: username contains tbd
+                                type: string
+                            type: object
+                          description: auth contains tbd
+                          type: object
+                        hosts:
+                          description: hosts contains tbd
+                          properties:
+                            default:
+                              description: default contains tbd
+                              type: string
+                            discovery:
+                              description: discovery contains tbd
+                              type: string
+                            public:
+                              description: public contains tbd
+                              type: string
+                          type: object
+                        name:
+                          description: name contains tbd
+                          type: string
+                        namespace:
+                          description: namespace contains tbd
+                          type: string
+                        path:
+                          description: path contains tbd
+                          properties:
+                            default:
+                              description: default contains tbd
+                              type: string
+                            discovery:
+                              description: discovery contains tbd
+                              type: string
+                            public:
+                              description: public contains tbd
+                              type: string
+                          type: object
+                        port:
+                          additionalProperties:
+                            properties:
+                              default:
+                                description: default contains tbd
+                                format: int64
+                                type: integer
+                              internal:
+                                description: internal contains tbd
+                                format: int64
+                                type: integer
+                              nodeport:
+                                description: nodeport contains tbd
+                                format: int64
+                                type: integer
+                              public:
+                                description: public contains tbd
+                                format: int64
+                                type: integer
+                            type: object
+                          description: port contains tbd
+                          type: object
+                        type:
+                          description: type contains tbd
+                          type: string
+                      type: object
+                images:
+                  description: images contains tbd
+                  properties:
+                    tags:
+                      additionalProperties:
+                        type: string
+                      description: tags contains tbd
+                      type: object
+                  type: object
+                labels:
+                  additionalProperties:
+                    type: string
+                  type: object
+                pod:
+                  description: pod contains tbd
+                  properties:
+                    affinity:
+                      description: affinity contains tbd
+                      type: object
+                    lifecycle:
+                      description: lifecycle contains tbd
+                      type: object
+                    replicas:
+                      additionalProperties:
+                        format: int64
+                        type: integer
+                      description: replicas contains tbd
+                      type: object
+                    resources:
+                      additionalProperties:
+                        properties:
+                          limits:
+                            description: limits contains tbd
+                            properties:
+                              cpu:
+                                description: cpu contains tbd
+                                type: string
+                              memory:
+                                description: memory contains tbd
+                                type: string
+                            type: object
+                          requests:
+                            description: requests contains tbd
+                            properties:
+                              cpu:
+                                description: cpu contains tbd
+                                type: string
+                              memory:
+                                description: memory contains tbd
+                                type: string
+                            type: object
+                        type: object
+                      description: resources contains tbd
+                      type: object
+                  type: object
+              type: object
+          required:
+          - source
+          type: object
+        status:
+          properties:
+            conditions:
+              description: 'List of conditions and states related to the resource.'
+              items:
+                properties:
+                  lastTransitionTime:
+                    format: date-time
+                    type: string
+                  message:
+                    type: string
+                  reason:
+                    type: string
+                  resourceName:
+                    type: string
+                  resourceVersion:
+                    format: int32
+                    type: integer
+                  status:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - type
+                - status
+                type: object
+              type: array
+            reason:
+              description: Reason indicates the reason for any related failures.
+              type: string
+            satisfied:
+              description: Satisfied indicates if the release's ActualState satisfies
+                its target state
+              type: boolean
+          required:
+          - satisfied
+          type: object
+  version: v1alpha1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

@@ -1,0 +1,8 @@
+resources:
+- ../../../base/proxy
+
+configMapGenerator:
+  - name: proxy-config
+    behavior: merge
+    files:
+      - config/nginx.conf

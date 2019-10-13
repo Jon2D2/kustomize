@@ -1,0 +1,12 @@
+resources:
+- ../base
+
+namespace: overlay2
+nameSuffix: -overlay2
+
+configMapGenerator:
+- literals:
+  - MY_ENV=baz
+  name: example
+  behavior: replace
+

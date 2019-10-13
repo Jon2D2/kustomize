@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1
+kind: Values
+metadata:
+  name: sentryenv
+spec:
+  env: staging
+  readinessProbe:
+    timeoutSeconds: 7
+    periodSeconds: 8

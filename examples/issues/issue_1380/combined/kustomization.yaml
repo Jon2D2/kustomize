@@ -1,0 +1,6 @@
+bases:
+- ../role
+- ../cluster-role
+
+resources:
+- resources.yaml

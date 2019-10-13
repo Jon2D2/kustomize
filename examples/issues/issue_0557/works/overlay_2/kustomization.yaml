@@ -1,0 +1,7 @@
+namePrefix: overlay2-
+
+bases:
+- ../../base
+
+# patches:
+#   - patch.yaml

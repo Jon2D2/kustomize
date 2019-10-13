@@ -1,0 +1,12 @@
+nameReference:
+- kind: Gorilla
+  fieldSpecs:
+  - kind: AnimalPark
+    path: spec/gorillaRef/name
+- kind: Giraffe
+  fieldSpecs:
+  - kind: AnimalPark
+    path: spec/giraffeRef/name
+varReference:
+- path: spec/food
+  kind: AnimalPark

@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  settings.cfg: |
+    Content of the overlay settings.cfg
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: my-configmap-8gkkcddg96

@@ -1,0 +1,127 @@
+apiVersion: my.org/v1alpha1
+kind: MyCRD
+metadata:
+  labels:
+    app: kubeapp
+  name: my-crd
+  namespace: kubeapp-ns
+spec:
+  replica: 123
+  simpletext: some simple text
+---
+apiVersion: apps/v1
+kind: Ingress
+metadata:
+  labels:
+    app: kubeapp
+  name: kubeapp
+  namespace: kubeapp-ns
+spec:
+  backend:
+    serviceName: kubeapp
+    servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kubeapp
+  name: kubeapp
+  namespace: kubeapp-ns
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: kubeapp
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kubeapp
+  name: kubeapp
+  namespace: kubeapp-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubeapp
+  template:
+    metadata:
+      labels:
+        app: kubeapp
+      name: kubeapp
+    spec:
+      containers:
+      - image: hack4easy/kubesim_health-amd64:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8081
+        name: kubeapp
+        ports:
+        - containerPort: 8081
+          name: kubeapp
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8081
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: kubeapp
+  name: kubeapp-ns
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app: kubeapp
+  name: mycrds.my.org
+spec:
+  additionalPrinterColumns: null
+  group: my.org
+  names:
+    kind: MyCRD
+    plural: mycrds
+    shortNames:
+    - mycrd
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            replica:
+              type: integer
+            simpletext:
+              type: string
+          type: object
+  version: v1alpha1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

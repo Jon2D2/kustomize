@@ -1,0 +1,6 @@
+commonLabels:
+  environment: staging
+configurations:
+- ./kustomizeconfig/commonlabels.yaml
+resources:
+- external-service.yaml

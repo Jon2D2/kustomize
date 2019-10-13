@@ -1,0 +1,10 @@
+resources:
+- ./snowball-webclient-ip.yaml
+- ./snowball-webclient-certificate.yaml
+- ./snowball-webclient-deployment.yaml
+- ./snowball-webclient-ingress.yaml
+- ./snowball-webclient-service.yaml
+
+configurations:
+- ./kustomizeconfig/ingress.yaml
+

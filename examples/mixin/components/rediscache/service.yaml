@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rediscache
+spec:
+  selector:
+    app: rediscache
+  ports:
+  - name: web
+    port: $(Values.rediscache.spec.port)
+    targetPort: $(Values.rediscache.spec.targetPort)

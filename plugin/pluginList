@@ -1,0 +1,6 @@
+plugin/someteam.example.com/v1/someservicegenerator/SomeServiceGenerator
+plugin/someteam.example.com/v1/secretsfromdatabase/SecretsFromDatabase
+plugin/someteam.example.com/v1/stringprefixer/StringPrefixer
+plugin/someteam.example.com/v1/dateprefixer/DatePrefixer
+# plugin/kustomize.config.k8s.io/v1beta1/kubectlapplyordertransformer/KubectlApplyOrderTransformer
+# plugin/kustomize.config.k8s.io/v1beta1/kubectldeleteordertransformer/KubectlDeleteOrderTransformer

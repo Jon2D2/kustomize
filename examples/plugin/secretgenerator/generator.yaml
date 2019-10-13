@@ -1,0 +1,13 @@
+apiVersion: builtin
+kind: SecretGenerator
+metadata:
+  name: secretgenerator
+behavior: merge
+envs:
+- a.env
+- b.env
+files:
+- obscure=longsecret.txt
+literals:
+- FRUIT=apple
+- VEGETABLE=carrot

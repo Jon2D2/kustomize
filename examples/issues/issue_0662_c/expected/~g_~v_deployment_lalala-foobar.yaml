@@ -1,0 +1,14 @@
+kind: Deployment
+metadata:
+  name: lalala-foobar
+spec:
+  template:
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: lalala-xxx-ctd2ckb7h7
+        - configMapRef:
+            name: yyy-bkfmbb8t66
+        image: busybox
+        name: foobar

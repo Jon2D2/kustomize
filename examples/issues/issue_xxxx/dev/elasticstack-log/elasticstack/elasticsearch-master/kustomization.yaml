@@ -1,0 +1,47 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+#nameSuffix: -master
+namePrefix: master-
+
+commonLabels:
+  app.kubernetes.io/component: master-node
+  component: master-node
+
+resources:
+  - ../elasticsearch
+  - elasticsearch-master-service.yaml
+
+vars:
+  - name: elasticsearch-master-service-name
+    objref:
+      apiVersion: v1
+      kind: Service
+      name: elasticsearch
+    fieldref:
+      fieldpath: metadata.name
+  - name: elasticsearch-master-statefulset-app-label
+    objref:
+      apiVersion: apps/v1
+      kind: StatefulSet
+      name: elasticsearch
+    fieldref:
+      fieldpath: metadata.labels.app
+  - name: elasticsearch-master-statefulset-component-label
+    objref:
+      apiVersion: apps/v1
+      kind: StatefulSet
+      name: elasticsearch
+    fieldref:
+      fieldpath: metadata.labels.component
+  - name: elasticsearch-master-statefulset-instance-label
+    objref:
+      apiVersion: apps/v1
+      kind: StatefulSet
+      name: elasticsearch
+    fieldref:
+      fieldpath: metadata.labels.instance
+
+patchesStrategicMerge:
+  - add-master-node-settings.yaml

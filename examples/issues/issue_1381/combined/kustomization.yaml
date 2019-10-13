@@ -1,0 +1,5 @@
+resources:
+- ../validatingwebhook
+- ../persistentvolume
+- ../storageclass
+- clusterrole.yaml

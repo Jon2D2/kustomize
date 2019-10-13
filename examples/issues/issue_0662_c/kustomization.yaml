@@ -1,0 +1,13 @@
+resources:
+- ./base
+
+secretGenerator:
+- name: xxx
+  behavior: merge
+  literals:
+  - password=12345699999
+
+configmapGenerator:
+- name: yyy
+  literals:
+  - password=123456

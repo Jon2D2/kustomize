@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: centraldashboard
+  name: deployment
+spec:
+  selector:
+    matchLabels:
+      app: centraldashboard
+  template:
+    metadata:
+      labels:
+        app: centraldashboard
+    spec:
+      containers:
+      - image: gcr.io/kubeflow-images-public/centraldashboard:v20190823-v0.6.0-rc.0-69-gcb7dab59
+        name: main

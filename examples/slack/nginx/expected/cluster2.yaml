@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: manifests for prod environement
+  labels:
+    app: nginx
+    variant: prod
+  name: prod-nginx
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: nginx
+      variant: prod
+  template:
+    metadata:
+      annotations:
+        note: manifests for prod environement
+      labels:
+        app: nginx
+        variant: prod
+    spec:
+      containers:
+      - image: nginx:1.16.1
+        name: nginx
+        resources:
+          limits:
+            cpu: 432m
+            memory: 128Mi

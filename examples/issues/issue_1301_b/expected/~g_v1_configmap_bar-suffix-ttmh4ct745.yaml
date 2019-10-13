@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  file2: |
+    file2 content
+kind: ConfigMap
+metadata:
+  name: bar-suffix-ttmh4ct745

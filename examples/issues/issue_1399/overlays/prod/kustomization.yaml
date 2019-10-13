@@ -1,0 +1,6 @@
+resources:
+- ../../base
+
+patchesStrategicMerge:
+- patch-worker.yaml
+- patch-web.yaml

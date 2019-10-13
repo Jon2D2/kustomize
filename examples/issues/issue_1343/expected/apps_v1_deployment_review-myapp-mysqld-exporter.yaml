@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus-exporter
+    app.kubernetes.io/instance: review-myapp-mysqld-exporter
+    app.kubernetes.io/managed-by: pipeline
+    app.kubernetes.io/name: myapp-mysqld-exporter
+    app.kubernetes.io/owner: myowner
+    app.kubernetes.io/part-of: myapp
+    app.mintel.com/env: dev
+    app.mintel.com/pipeline-stage: review
+    k8s-app: myapp
+    name: myapp-mysqld-exporter
+  name: review-myapp-mysqld-exporter
+  namespace: mynamespace
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: prometheus-exporter
+      app.kubernetes.io/instance: review-myapp-mysqld-exporter
+      app.kubernetes.io/managed-by: pipeline
+      app.kubernetes.io/name: myapp-mysqld-exporter
+      app.kubernetes.io/owner: myowner
+      app.kubernetes.io/part-of: myapp
+      app.mintel.com/env: dev
+      app.mintel.com/pipeline-stage: review
+      k8s-app: myapp
+      name: myapp-mysqld-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: prometheus-exporter
+        app.kubernetes.io/instance: review-myapp-mysqld-exporter
+        app.kubernetes.io/managed-by: pipeline
+        app.kubernetes.io/name: myapp-mysqld-exporter
+        app.kubernetes.io/owner: myowner
+        app.kubernetes.io/part-of: myapp
+        app.mintel.com/env: dev
+        app.mintel.com/pipeline-stage: review
+        k8s-app: myapp
+        name: myapp-mysqld-exporter
+    spec:
+      containers:
+      - args:
+        - --web.listen-address=:9104
+        - --log.level=info
+        - --log.format=logger:stderr?json=true
+        command:
+        - /bin/mysqld_exporter
+        env:
+        - name: DATA_SOURCE_NAME
+          value: user:password@(host:3306)/
+        image: prom/mysqld-exporter:v0.11.0
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9104
+          initialDelaySeconds: 30
+        name: mysqld-exporter
+        ports:
+        - containerPort: 9104
+          name: metrics
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9104
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+          requests:
+            cpu: 30m
+            memory: 50Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 65534

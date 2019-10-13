@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: foocorp-operators-registry
+  namespace: kustomizedns
+spec:
+  displayName: Foo
+  image: docker-registry.default.svc:/foocorp/foocorp-operators-registry@sha256:NOTIMPORTANTFORTHETEST
+  publisher: Foo Corp.
+  sourceType: grpc

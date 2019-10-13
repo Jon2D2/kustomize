@@ -1,0 +1,44 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: mutating-webhook-configuration
+webhooks:
+  - name: mutating-create-update
+    clientConfig:
+      url: https://example.com
+      caBundle: $(TLSCERT)
+    failurePolicy: Fail
+    rules:
+      - apiGroups:
+          - mygroup
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - myresource
+    sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validating-webhook-configuration
+webhooks:
+  - name: validating-create-update
+    clientConfig:
+      url: https://example.com
+      caBundle: $(TLSCERT)
+    failurePolicy: Fail
+    rules:
+      - apiGroups:
+          - mygroup
+        apiVersions:
+          - v1alpha1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - myresource
+    sideEffects: None
+

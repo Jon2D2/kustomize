@@ -1,0 +1,35 @@
+---
+# Do not change this apiVersion to let it deploy on
+# Kubernetes 1.16. It is used to showcase handling of
+# multiple apiVersion for a same kind
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elasticsearch-data-v1
+spec:
+  serviceName: elasticsearch-data-v1
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        tier: logging-plane
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                # matchLabels:
+                matchExpressions:
+                - key: app.kubernetes.io/app
+                  operator: In
+                  values:
+                  - elasticsearch
+                - key: role
+                  operator: In
+                  values:
+                  - data
+              topologyKey: kubernetes.io/hostname

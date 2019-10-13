@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap
+data:
+  ZZZ: $(Ingress.my-ingress.spec.rules[0].http.paths[0].backend.servicePort)
+  CNAME: $(CNAME)

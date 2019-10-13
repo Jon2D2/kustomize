@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql
+  labels: $(EndpointCatalogue.endpoints.spec.mysql.labels)
+spec:
+  selector:
+    matchLabels: $(EndpointCatalogue.endpoints.spec.mysql.labels)
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: $(EndpointCatalogue.endpoints.spec.mysql.labels)
+    spec:
+      initContainers: $(Deployment.wordpress.spec.template.spec.initContainers)
+      containers:
+      - image: mysql:$(SoftwareVersions.software-versions.spec.images.mysql.tag)
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        emptyDir: {}

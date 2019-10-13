@@ -1,0 +1,7 @@
+nameprefix: persistentvolumes-
+
+configurations:
+- kustomizeconfig.yaml
+
+resources:
+- persistentvolume.yaml

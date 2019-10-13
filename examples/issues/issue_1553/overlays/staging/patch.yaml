@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core
+spec:
+  template:
+    spec:
+      containers:
+      - name: sentry
+        env:
+        - name: SENTRY_DNS
+          valueFrom:
+            secretKeyRef:
+              name: $(Secret.core.metadata.name)
+              key: sentryDNS

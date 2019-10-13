@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esp
+spec:
+  template:
+    spec:
+      containers:
+      - name: esp
+        imagePullPolicy: Always
+        image: leaf/esp-service

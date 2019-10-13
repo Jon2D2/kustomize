@@ -1,0 +1,3 @@
+resources:
+  # testing environment specializations
+  - environments/test

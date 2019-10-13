@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: appdeployment
+spec:
+  selector:
+    app: appdeployment
+  ports:
+  - name: web
+    port: $(Values.appdeployment.spec.port)
+    targetPort: $(Values.appdeployment.spec.targetPort)

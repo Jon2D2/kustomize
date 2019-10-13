@@ -1,0 +1,12 @@
+resources:
+- ../base
+- dep-patch.yaml
+
+# vars:
+# - name: Deployment.restart.spec.template.spec.restartPolicy
+#   objref:
+#     kind: Deployment
+#     name: restart
+#     apiVersion: apps/v1
+#   fieldref:
+#     fieldpath: spec.template.spec.restartPolicy

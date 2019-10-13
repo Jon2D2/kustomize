@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep
+spec:
+  template:
+    spec:
+      containers:
+      - name: dep
+        env:
+        - name: SOME_ENV
+          value: $(MY_ENV)
+

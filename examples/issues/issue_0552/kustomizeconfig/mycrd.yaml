@@ -1,0 +1,6 @@
+namespace:
+- path: metadata/namespace
+  version: v1alpha1
+  group: my.org
+  kind: MyCRD
+  skip: true

@@ -1,0 +1,4 @@
+configMapGenerator:
+- name: cm
+  literals:
+  - FOO=BAR

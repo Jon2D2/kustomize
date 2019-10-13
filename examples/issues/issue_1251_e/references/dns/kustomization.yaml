@@ -1,0 +1,12 @@
+resources:
+- ../base
+- dep-patch.yaml
+
+# vars:
+# - name: Deployment.dns.spec.template.spec.dnsPolicy
+#   objref:
+#     kind: Deployment
+#     name: dns
+#     apiVersion: apps/v1
+#   fieldref:
+#     fieldpath: spec.template.spec.dnsPolicy

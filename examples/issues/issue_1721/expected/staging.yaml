@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stagingpfx-puppetserver
+  namespace: stagingns
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: puppetserver
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: puppetserver
+  name: stagingpfx-puppetserver
+  namespace: stagingns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: puppetserver
+  template:
+    metadata:
+      labels:
+        app: puppetserver
+    spec:
+      containers:
+      - image: hack4easy/kubesim_health-amd64:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8081
+        name: main
+        ports:
+        - containerPort: 8081
+          name: pupperserver
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8081
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: stagingpfx-puppetserver
+  namespace: stagingns
+spec:
+  maxReplicas: 6
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 50
+        type: Utilization
+    type: Resource
+  - pods:
+      metric:
+        name: packets-per-second
+      target:
+        averageValue: 1k
+        type: AverageValue
+    type: Pods
+  - object:
+      describedObject:
+        apiVersion: networking.k8s.io/v1beta1
+        kind: Ingress
+        name: stagingpfx-main-route
+      metric:
+        name: requests-per-second
+      target:
+        type: Value
+        value: 10k
+    type: Object
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: stagingpfx-puppetserver
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: stagingpfx-main-route
+  namespace: stagingns
+spec:
+  backend:
+    serviceName: stagingpfx-puppetserver
+    servicePort: 80

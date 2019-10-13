@@ -1,0 +1,4 @@
+resources:
+- ../common
+- ../component1
+- ../component2

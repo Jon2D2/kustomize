@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  centraldashboardImageName: kubeflow-images-public/centraldashboard
+  centraldashboardImageTag: v20190823-v0.6.0-rc.0-69-gcb7dab59
+  registry: gcr.io
+kind: ConfigMap
+metadata:
+  labels:
+    app: centraldashboard
+  name: parameters-2bfg9t98bh

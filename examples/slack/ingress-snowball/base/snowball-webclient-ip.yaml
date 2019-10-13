@@ -1,0 +1,3 @@
+kind: GKEGlobalStaticIP
+metadata:
+  name: snowball-webclient-ip

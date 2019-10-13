@@ -1,0 +1,20 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+- cronjob.yaml
+- deployment.yaml
+- values.yaml
+
+configurations:
+- kustomizeconfig.yaml
+
+vars:
+- name : Values.shared.spec.env
+  objref:
+    apiVersion: kustomize.config.k8s.io/v1
+    kind: Values
+    name: shared
+  fieldref:
+    fieldpath: spec.env

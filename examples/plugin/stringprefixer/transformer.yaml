@@ -1,0 +1,5 @@
+apiVersion: someteam.example.com/v1
+kind: StringPrefixer
+metadata:
+  name: stringprefixer
+fieldSpecs:

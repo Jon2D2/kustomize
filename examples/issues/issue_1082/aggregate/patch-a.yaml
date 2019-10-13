@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  # Note: this is not the original name of the object
+  name: guestbook-a
+spec:
+  containers:
+  - name: nginx
+    env:
+    - name: patch-is-present
+      value: so-kustomize-works

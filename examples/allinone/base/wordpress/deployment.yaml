@@ -1,0 +1,51 @@
+apiVersion: apps/v1beta2 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: wordpress
+  labels: $(EndpointCatalogue.endpoints.spec.wordpress.labels)
+spec:
+  selector:
+    matchLabels: $(EndpointCatalogue.endpoints.spec.wordpress.labels)
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      # wordpress.labels tree will be inserted into metatda.labels.
+      # foo: bar label will then be added
+      labels:
+        parent-inline: $(EndpointCatalogue.endpoints.spec.wordpress.labels)
+        foo: bar
+    spec:
+      initContainers:
+      - name: init1
+        image: busybox
+        command:
+        - 'sh'
+        - '-c'
+        - 'echo $(Service.wordpress.metadata.name) && echo $(Service.mysql.metadata.name)'
+      - name: init2
+        image: busybox
+        command:
+        - 'sh'
+        - '-c'
+        - 'echo $(CommonAddresses.common-addresses.spec.dns.upstream_servers[2])'
+      containers:
+      - image: wordpress:$(SoftwareVersions.software-versions.spec.images.wordpress.tag)
+        name: wordpress
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: $(Service.mysql.metadata.name)
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+      volumes:
+      - name: wordpress-persistent-storage
+        emptyDir: {}

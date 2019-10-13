@@ -1,0 +1,3 @@
+varReference:
+- path: spec/replicas
+  kind: Deployment

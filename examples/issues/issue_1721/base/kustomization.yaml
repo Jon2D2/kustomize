@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ingress.yaml
+- service.yaml
+- deployment.yaml
+- horizontal_pod_autoscaler.yaml
+
+configurations:
+- kustomizeconfig/name_references.yaml
+# Leverage auto-var feature instead doing it manually
+# Uncommment following section to do it manually
+# - kustomizeconfig/var_references.yaml
+
+# Leverage auto-var feature instead doing it manually
+# Uncommment following section to do it manually
+# vars:
+# - name: HorizontalPodAutoscaler.puppetserver.spec.minReplicas
+#   objref:
+#     kind: HorizontalPodAutoscaler
+#     name: puppetserver
+#     apiVersion: autoscaling/v2beta2
+#   fieldref:
+#     fieldpath: spec.minReplicas

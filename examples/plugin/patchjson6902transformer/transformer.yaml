@@ -1,0 +1,10 @@
+apiVersion: builtin
+kind: PatchJson6902Transformer
+metadata:
+  name: patchjson6902transformer
+target:
+  kind: MyCRD
+  name: my-crd
+  group: my.org
+  version: v1alpha1
+path: patch.json

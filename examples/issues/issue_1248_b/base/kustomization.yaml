@@ -1,0 +1,17 @@
+configMapGenerator:
+- literals:
+  - MY_ENV=foo
+  name: example
+
+vars:
+- fieldref:
+    fieldPath: data.MY_ENV
+  name: MY_ENV
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: example
+
+resources:
+- deployment.yaml
+

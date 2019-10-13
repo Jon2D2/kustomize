@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dep1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dep1
+    spec:
+      containers:
+      - env:
+        - name: NFS_PATH
+          value: /var/nfs
+        image: from.the.kustomization.yaml/nginx:latest
+        name: nginx
+      - env:
+        - name: PROVISIONER_NAME
+          value: fuseim.pri/ifs
+        image: from.the.values.io/busybox:latest
+        name: busybox
+      initContainers:
+      - image: from.the.values.io/withoutimagetransformer:latest
+        name: init
+      serviceAccountName: dep1

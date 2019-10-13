@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: KubectlApplyOrderTransformer
+metadata:
+  name: kubectlapplyordertransformer
+kindorder:
+- CustomResourceDefinition
+- Namespace
+- Deployment
+- Service
+- Ingress
+- MyCRD

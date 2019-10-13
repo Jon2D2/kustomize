@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ServiceMonitor
+metadata:
+  labels:
+    part-of: b
+    type: web
+  name: monitor-web
+spec:
+  endpoints:
+  - interval: 10s
+    port: web
+  selector:
+    matchLabels:
+      part-of: b
+      type: web
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ServiceMonitor
+metadata:
+  labels:
+    part-of: b
+    type: worker
+  name: monitor-worker
+spec:
+  endpoints:
+  - interval: 10s
+    port: worker
+  selector:
+    matchLabels:
+      part-of: b
+      type: worker

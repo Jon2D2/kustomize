@@ -1,0 +1,28 @@
+---
+apiVersion: my.group.org/v1alpha1
+kind: Chart
+metadata:
+  name: wordpress
+spec:
+  source: $(SoftwareVersions.software-versions.spec.charts.wordpress)
+  values:
+    images: $(SoftwareVersions.software-versions.spec.images.wordpress)
+    labels: $(EndpointCatalogue.endpoints.spec.wordpress.labels)
+    pod:
+      replicas:
+        api: 1
+---
+apiVersion: my.group.org/v1alpha1
+kind: Chart
+metadata:
+  name: mysql
+spec:
+  source: $(SoftwareVersions.software-versions.spec.charts.mysql)
+  values:
+    images: $(SoftwareVersions.software-versions.spec.images.mysql)
+    labels: $(EndpointCatalogue.endpoints.spec.mysql.labels)
+    pod:
+      replicas:
+        api: 1
+
+

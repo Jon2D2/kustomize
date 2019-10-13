@@ -1,0 +1,11 @@
+namespace: appName
+namePrefix: prefix-
+commonLabels:
+  app: appName
+
+resources:
+  - ../base1
+  - app-other-service.yaml
+
+patchesStrategicMerge:
+  - app-deployment-patch.yaml

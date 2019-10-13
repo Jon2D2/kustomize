@@ -1,0 +1,73 @@
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: commonaddressess.my.group.org
+spec:
+  additionalPrinterColumns:
+  group: my.group.org
+  version: v1alpha1
+  names:
+    kind: CommonAddresses
+    plural: commonaddressess
+    shortNames:
+    - pcaddr
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          type: object
+          properties:
+            dns:
+              type: object
+              properties:
+                cluster_domain:
+                  type: string
+                service_ip:
+                  type: string
+                upstream_servers:
+                  type: array
+                  items:
+                    type: string
+            etcd:
+              type: object
+              properties:
+                container_port:
+                  type: number
+                haproxy_port:
+                  type: number
+            node_ports:
+              type: object
+              properties:
+                drydock_api:
+                  type: number
+                maas_api:
+                  type: number
+                maas_proxy:
+                  type: number
+                shipyard_api:
+                  type: number
+                airflow_web:
+                  type: number
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+...

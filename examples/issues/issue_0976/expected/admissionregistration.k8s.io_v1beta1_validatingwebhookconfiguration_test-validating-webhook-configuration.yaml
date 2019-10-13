@@ -1,0 +1,23 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  labels:
+    foo: bar
+  name: test-validating-webhook-configuration
+webhooks:
+- clientConfig:
+    caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCkxpNHUKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQotLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS0KTGk0dQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    url: https://example.com
+  failurePolicy: Fail
+  name: validating-create-update
+  rules:
+  - apiGroups:
+    - mygroup
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - myresource
+  sideEffects: None

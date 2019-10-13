@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kubeapp
+    env: canary
+  name: kubeapp-canary
+  namespace: kubeapp-ns
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: kubeapp
+    env: canary
+  type: LoadBalancer

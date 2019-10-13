@@ -1,0 +1,11 @@
+resources:
+- configmap.yaml
+
+vars:
+- name: ConfigMap.global.data.user
+  objref:
+    apiVersion: v1
+    kind: ConfigMap
+    name: global
+  fieldref:
+    fieldpath: data.user

@@ -1,0 +1,27 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+
+resources:
+- resource.yaml
+- values.yaml
+
+vars:
+- name: Values.file1.spec.Release.Namespace
+  objref:
+    apiVersion: kustomize.config.k8s.io/v1
+    kind: Values
+    name: file1
+  fieldref:
+    fieldpath: spec.Release.Namespace
+- name: Values.file1.spec.url
+  objref:
+    apiVersion: kustomize.config.k8s.io/v1
+    kind: Values
+    name: file1
+  fieldref:
+    fieldpath: spec.url
+
+configurations:
+- kustomizeconfig.yaml

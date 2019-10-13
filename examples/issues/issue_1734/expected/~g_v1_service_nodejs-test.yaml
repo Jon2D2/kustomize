@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: nodejs-test
+  name: nodejs-test
+spec:
+  externalIPs:
+  - 10.0.0.3
+  ports:
+  - name: client-connect
+    port: "3000"
+    targetPort: 3000
+  selector:
+    app: nodejs-test
+  type: ClusterIP

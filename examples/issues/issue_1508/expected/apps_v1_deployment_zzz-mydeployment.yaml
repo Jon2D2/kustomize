@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zzz-myDeployment
+spec:
+  template:
+    metadata:
+      labels:
+        backend: awesome
+    spec:
+      containers:
+      - image: whatever
+        name: whatever

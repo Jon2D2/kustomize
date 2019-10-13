@@ -1,0 +1,9 @@
+varReference:
+- kind: Chart
+  path: spec/values/endpoints/messaging/auth/user/password
+- kind: Chart
+  path: spec/source
+- kind: Chart
+  path: spec/values/images
+- kind: Chart
+  path: spec/values/labels

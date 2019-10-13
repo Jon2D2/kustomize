@@ -1,0 +1,4 @@
+varReference:
+- kind: Service
+  path: spec/externalIPs
+

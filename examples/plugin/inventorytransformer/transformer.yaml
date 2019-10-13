@@ -1,0 +1,7 @@
+apiVersion: builtin
+kind: InventoryTransformer
+metadata:
+  name: inventorytransformer
+  namespace: default
+# policy: GarbageCollect
+policy: GarbageIgnore

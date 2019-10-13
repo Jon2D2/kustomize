@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Values
+metadata:
+  name: app-dev-base
+  namespace: build
+spec:
+  field1: value1

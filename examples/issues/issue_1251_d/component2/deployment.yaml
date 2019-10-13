@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: component2
+  labels:
+     app: component2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: component2
+  template:
+    metadata:
+      labels:
+        app: component2
+    spec:
+      containers:
+      - name: component2
+        image: k8s.gcr.io/busybox
+        env:
+        - name: APP_USER
+          value: $(ConfigMap.global.data.user)
+        command: [ "/bin/sh", "-c", "cat /etc/config/component2 && sleep 60" ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: global
+          items:
+          - key: settings
+            path: component2

@@ -1,0 +1,7 @@
+resources:
+- ../../../../base/myapp/mycomponent2
+configMapGenerator:
+- name: com2
+  behavior: merge
+  literals:
+    - from=overlay

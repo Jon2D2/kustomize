@@ -1,0 +1,9 @@
+apiVersion: builtin
+kind: KindOrderTransformer
+metadata:
+  name: kindordertransformer
+kindorder:
+- Namespace
+- CustomResourceDefinition
+- MyCRD
+- Secret

@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- namespace.yaml
+- other.yaml
+
+# This kustomization.yaml leverages auto-var feature
+# instead of doing it manually
+# Uncommment if you do not have access to the feature.
+# vars:
+# - name: ServiceAccount.my-service-account.metadata.namespace
+#   objref:
+#     kind: ServiceAccount
+#     name: my-service-account
+#     apiVersion: v1
+#   fieldref:
+#     fieldpath: metadata.namespace
+ 
+# configurations:
+# - kustomizeconfig/namespace.yaml

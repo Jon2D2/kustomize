@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+    special: singleton
+  name: singleton
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      special: singleton
+  template:
+    metadata:
+      labels:
+        app: nginx
+        special: singleton
+    spec:
+      containers:
+      - image: nginx:1.7.9
+        name: nginx
+        ports:
+        - containerPort: 80

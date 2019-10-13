@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- pv.yaml
+- values.yaml
+
+secretGenerator:
+- name: dumpster-blobfuse-credentials
+  literals:
+  - username=admin
+  - password=somepw
+
+vars:
+- name: CONTAINER_NAME
+  objref:
+    apiVersion: kustomize.config.k8s.io/v1
+    kind: Values
+    name: file1
+  fieldref:
+    fieldpath: spec.containername
+
+configurations:
+- kustomizeconfig/pv.yaml

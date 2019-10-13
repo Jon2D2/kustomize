@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redissession
+spec:
+  ports:
+  - name: web
+    port: 8005
+    targetPort: 9705
+  selector:
+    app: redissession

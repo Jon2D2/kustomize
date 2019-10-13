@@ -1,0 +1,8 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: main-route
+spec:
+  backend:
+    serviceName: puppetserver
+    servicePort: 80

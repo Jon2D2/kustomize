@@ -1,0 +1,14 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+commonLabels:
+  app.kubernetes.io/app: elasticsearch
+  app: elasticsearch
+
+resources:
+  - elasticsearch-statefulSet.yaml
+
+images:
+  - name: elasticsearch
+    newTag: 6.6.0

@@ -1,0 +1,14 @@
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+- name: public
+  envs:
+  - params.env
+ 
+commonAnnotations:
+  service.beta.kubernetes.io/aws-load-balancer-ssl-cert: $(ConfigMap.public.data.AWS_LOAD_BALANCER_SSL_CERT)
+  service.beta.kubernetes.io/aws-load-balancer-extra-security-group: $(ConfigMap.public.data.AWS_LOAD_BALANCER_EXTRA_SECURITY_GROUP)
+
+resources:
+- resources.yaml

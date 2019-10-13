@@ -1,0 +1,31 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    app: wordpress
+  name: wordpress-cron
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - args:
+            - /path/to/wp-cron.php
+            command:
+            - php
+            env:
+            - name: WORDPRESS_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: wordpress-db-auth
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: wordpress-db-auth
+            image: wordpress:4.8-apache
+            name: wordpress
+          restartPolicy: OnFailure
+  schedule: '*/10 * * * *'

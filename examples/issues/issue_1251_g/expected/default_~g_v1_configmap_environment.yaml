@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  branch: |
+    -branch
+  domain: domain.com
+  name: dev
+kind: ConfigMap
+metadata:
+  name: environment

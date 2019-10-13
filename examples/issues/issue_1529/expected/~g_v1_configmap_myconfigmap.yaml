@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  a_variable: a value
+  another.variable.with.dots.in.it: another value
+kind: ConfigMap
+metadata:
+  name: myConfigMap

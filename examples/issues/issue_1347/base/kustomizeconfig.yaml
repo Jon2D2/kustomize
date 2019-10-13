@@ -1,0 +1,7 @@
+nameReference:
+- kind: StorageClass
+  version: v1
+  group: storage.k8s.io
+  fieldSpecs:
+  - path: spec/volumeClaimTemplates/spec/storageClassName
+    kind: StatefulSet

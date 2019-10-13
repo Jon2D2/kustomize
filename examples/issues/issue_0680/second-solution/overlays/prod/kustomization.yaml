@@ -1,0 +1,9 @@
+
+resources:
+- ../../base
+
+configMapGenerator:
+- name: my-configmap
+  behavior: merge
+  files:
+  - settings.cfg

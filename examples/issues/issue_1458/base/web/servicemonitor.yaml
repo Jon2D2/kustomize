@@ -1,0 +1,9 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ServiceMonitor
+metadata:
+  name: monitor-web
+spec:
+  endpoints:
+  - port: web            # works for different port numbers as long as the name matches
+    interval: 10s        # scrape the endpoint every 10 seconds

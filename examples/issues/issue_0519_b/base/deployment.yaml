@@ -1,0 +1,27 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kubeapp
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: kubeapp
+      labels:
+        app: kubeapp
+    spec:
+      containers:
+      - name: kubeapp
+        image: hack4easy/kubesim_health-amd64:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 8081
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8081
+        ports:
+        - name: kubeapp
+          containerPort: 8081

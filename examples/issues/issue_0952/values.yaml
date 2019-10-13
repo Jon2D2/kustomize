@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1
+kind: Values
+metadata:
+  name: shared
+spec:
+  env:
+  - name: WORDPRESS_DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: wordpress-db-auth
+        key: user
+  - name: WORDPRESS_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: wordpress-db-auth
+        key: password

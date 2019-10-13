@@ -1,0 +1,5 @@
+varReference:
+- kind: Service
+  path: metadata/labels
+- kind: Service
+  path: spec/selector

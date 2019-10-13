@@ -1,0 +1,30 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: crb
+subjects:
+- kind: ServiceAccount
+  name: sa
+  namespace: bar
+# - kind: ServiceAccount
+#   name: sa
+#   namespace: hello
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa
+  namespace: bar
+# ---
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: sa
+#   namespace: hello
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm
+  namespace: foo # this configmap has the same namespace as the transformer target

@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  labels:
+    app: appName
+  name: prefix-app
+  namespace: appName
+spec:
+  selector:
+    app: appName

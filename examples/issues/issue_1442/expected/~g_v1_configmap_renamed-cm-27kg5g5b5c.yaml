@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  FOO: BAR
+  HELLO: WORLD
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels: {}
+  name: renamed-cm-27kg5g5b5c

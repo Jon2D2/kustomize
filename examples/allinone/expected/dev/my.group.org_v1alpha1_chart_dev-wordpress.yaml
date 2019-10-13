@@ -1,0 +1,20 @@
+apiVersion: my.group.org/v1alpha1
+kind: Chart
+metadata:
+  name: dev-wordpress
+spec:
+  source:
+    location: https://github.com/helm/charts/blob/
+    reference: latest
+    subpath: wordpress
+    type: git
+  values:
+    images:
+      registory: docker.io
+      repository: wordpress
+      tag: 5.2.1-apache
+    labels:
+      app: wordpress
+    pod:
+      replicas:
+        api: 1

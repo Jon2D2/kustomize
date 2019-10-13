@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foo-example
+spec:
+  template:
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: example-5cm72hhtk8
+        image: example
+        name: example

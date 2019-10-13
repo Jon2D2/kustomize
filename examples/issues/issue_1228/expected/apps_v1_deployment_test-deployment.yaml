@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+spec:
+  template:
+    spec:
+      containers:
+      - image: myapp
+        name: test-main

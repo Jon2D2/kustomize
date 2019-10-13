@@ -1,0 +1,3 @@
+kind: CustomResourceDefinition
+metadata:
+  name: my-crd

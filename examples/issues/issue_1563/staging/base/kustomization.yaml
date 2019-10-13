@@ -1,0 +1,6 @@
+resources:
+  - ../../base
+  - another_deployment.yaml
+
+namePrefix: staging-
+

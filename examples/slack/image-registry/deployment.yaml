@@ -1,0 +1,32 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: dep1
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: dep1
+  template:
+    metadata:
+      labels:
+        app: dep1
+    spec:
+      serviceAccountName: dep1
+      initContainers:
+        - name: init
+          image: $(Values.my-values.spec.registry)/withoutimagetransformer:latest
+      containers:
+        - name: nginx
+          image: docker.io/nginx:latest
+          env:
+            - name: NFS_PATH
+              value: /var/nfs
+        - name: busybox
+          image: docker.io/busybox:latest
+          env:
+            - name: PROVISIONER_NAME
+              value: fuseim.pri/ifs
+

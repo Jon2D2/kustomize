@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  batchSize: "100"
+  name: mnist-train-local
+kind: ConfigMap
+metadata:
+  name: mnist-map-training

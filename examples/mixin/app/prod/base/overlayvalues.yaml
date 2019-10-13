@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Values
+metadata:
+  name: rediscache
+  namespace: build
+spec:
+  port: 8704
+---
+apiVersion: v1
+kind: Values
+metadata:
+  name: redissession
+  namespace: build
+spec:
+  targetPort: 9705

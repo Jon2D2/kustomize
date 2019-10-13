@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: wordpress-cron
+  labels:
+    app: wordpress
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - image: wordpress:4.8-apache
+            name: wordpress
+            command:
+            - php
+            args:
+            - /path/to/wp-cron.php
+            env: $(Values.shared.spec.env)
+          restartPolicy: OnFailure

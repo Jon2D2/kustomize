@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: component1
+spec:
+  containers:
+    - name: component1
+      image: bash
+      env:
+        - name: POD_NAME
+          value: $(POD_NAME)
+        - name: IMAGE_NAME
+          value: $(IMAGE_NAME)

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: elasticsearch
+    app.kubernetes.io/app: elasticsearch
+    role: master
+  name: elasticsearch-data
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elasticsearch
+      app.kubernetes.io/app: elasticsearch
+      role: master
+      tier: logging-plane
+  serviceName: elasticsearch-data
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        app.kubernetes.io/app: elasticsearch
+        role: master
+        tier: logging-plane
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/app
+                  operator: In
+                  values:
+                  - elasticsearch
+                - key: role
+                  operator: In
+                  values:
+                  - data
+                matchLabels:
+                  app: elasticsearch
+                  app.kubernetes.io/app: elasticsearch
+                  role: master
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+  updateStrategy:
+    type: RollingUpdate

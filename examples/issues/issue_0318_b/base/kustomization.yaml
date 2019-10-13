@@ -1,0 +1,7 @@
+commonAnnotations:
+  service.beta.kubernetes.io/aws-load-balancer-ssl-cert: $(Values.public.spec.AWS_LOAD_BALANCER_SSL_CERT)
+  service.beta.kubernetes.io/aws-load-balancer-extra-security-group: $(Values.public.spec.AWS_LOAD_BALANCER_EXTRA_SECURITY_GROUP)
+
+resources:
+- values.yaml
+- resources.yaml

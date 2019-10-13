@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nginx-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: nginx
+          env:
+            - name: BACKEND_HOST
+              value: $(BACKEND_SERVICE_NAME)
+      initContainers:
+        - name: init-nginx-wait-backend
+          image: busybox:1.31
+          command: ['sh', '-c', 'until nslookup $(BACKEND_SERVICE_NAME); do sleep 2; done;']

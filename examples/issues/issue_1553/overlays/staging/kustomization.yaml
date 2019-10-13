@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../base
+
+secretGenerator:
+- name: core
+  type: Opaque
+  envs:
+  - secrets.txt
+
+patchesStrategicMerge:
+- patch.yaml
+
+# ##########################################################
+# Uncomment this section if you don't have this PR: 
+# Automatic Creation of 'vars:' and 'varReferences:' sections #1217
+# https://github.com/kubernetes-sigs/kustomize/pull/1217
+# ##########################################################
+ 
+# vars:
+# - name: Secret.core.metadata.name
+#   objref:
+#     kind: Secret
+#     name: core
+#     apiVersion: v1
+#   fieldref:
+#     fieldpath: metadata.name
+# 
+# configurations:
+# - ./kustomizeconfig/varreference.yaml

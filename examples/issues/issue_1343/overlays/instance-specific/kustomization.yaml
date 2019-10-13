@@ -1,0 +1,22 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+- ../../templates/mysqld-exporter
+
+commonLabels:
+  app.kubernetes.io/managed-by: pipeline
+  app.kubernetes.io/name: myapp-mysqld-exporter
+  app.kubernetes.io/owner: myowner
+  app.kubernetes.io/part-of: myapp
+  k8s-app: myapp
+  name: myapp-mysqld-exporter
+
+namePrefix: myapp-
+
+namespace: mynamespace
+
+images:
+- name: prom/mysqld-exporter
+  newTag: v0.11.0

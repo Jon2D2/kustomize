@@ -1,0 +1,11 @@
+---
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+namePrefix: scenario2-prd-normal-v1-
+resources:
+- ../../common             # Has Deployment
+- ../../scenario/scenario2 # apply changes necessary for scenario2
+- ../../environment/prd    # apply changes for prd
+- ../../processor/normal   # apply changes for normal
+- ../../version/v1         # Apply v1

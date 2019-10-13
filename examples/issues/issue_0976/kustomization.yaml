@@ -1,0 +1,27 @@
+resources:
+- admission_configurations.yaml
+
+namePrefix: test-
+
+commonLabels:
+  foo: bar
+
+configurations:
+  - kustomizeconfig.yaml
+
+secretGenerator:
+- name: webhook-server-cert
+  files:
+  - tls.crt=secret/tls.cert
+  - tls.key=secret/tls.key
+  type: "kubernetes.io/tls"
+
+vars:
+  - name: TLSCERT
+    objref:
+      kind: Secret
+      version: v1
+      name: webhook-server-cert
+    fieldref:
+      fieldpath: data[tls.crt]
+

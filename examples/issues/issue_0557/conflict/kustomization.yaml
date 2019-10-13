@@ -1,0 +1,3 @@
+resources:
+- ./overlay_a
+- ./overlay_b

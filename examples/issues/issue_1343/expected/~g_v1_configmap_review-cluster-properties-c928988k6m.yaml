@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: review-myapp-mysqld-exporter
+    app.mintel.com/env: dev
+    app.mintel.com/pipeline-stage: review
+  name: review-cluster-properties-c928988k6m
+  namespace: mynamespace

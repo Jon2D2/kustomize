@@ -1,0 +1,15 @@
+apiVersion: builtin
+kind: NamespaceTransformer
+metadata:
+  name: namespacetransformer
+  namespace: kubeapp-ns
+fieldSpecs:
+- path: metadata/namespace
+  create: true
+  kind: Service
+- path: metadata/namespace
+  create: true
+  kind: Deployment
+- path: metadata/namespace
+  create: true
+  kind: Ingress

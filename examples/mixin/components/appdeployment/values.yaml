@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Values
+metadata:
+  name: appdeployment
+  namespace: build
+spec:
+  port: 8001
+  targetPort: 9001

@@ -1,0 +1,21 @@
+namespace:
+- path: metadata/namespace
+  version: v1alpha1
+  group: my.org
+  kind: MyCRD
+  skip: true
+
+namePrefix:
+- path: metadata/name
+  version: v1alpha1
+  group: my.org
+  kind: MyCRD
+  skip: true
+
+commonLabels:
+- path: metadata/labels
+  version: v1alpha1
+  group: my.org
+  kind: MyCRD
+  skip: true
+

@@ -1,0 +1,12 @@
+resources:
+- ../base
+
+namespace: overlay1
+nameSuffix: -overlay1
+
+configMapGenerator:
+- literals:
+  - MY_ENV=bar
+  name: example
+  behavior: replace
+

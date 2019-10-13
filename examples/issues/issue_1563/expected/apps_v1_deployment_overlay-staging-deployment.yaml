@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overlay-staging-deployment
+spec:
+  template:
+    spec:
+      containers:
+      - env:
+        - name: MY_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: key
+              name: overlay-staging-mysecret-7m4thk7c67
+        image: test
+        name: test

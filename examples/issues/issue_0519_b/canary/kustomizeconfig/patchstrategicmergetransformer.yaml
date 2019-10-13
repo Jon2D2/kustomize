@@ -1,0 +1,6 @@
+apiVersion: builtin
+kind: PatchStrategicMergeTransformer
+metadata:
+  name: patchstrategicmergetransformer
+paths:
+- ingress.yaml

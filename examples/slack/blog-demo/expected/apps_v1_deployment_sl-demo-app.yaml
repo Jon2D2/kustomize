@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sl-demo-app
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: db.password
+              name: app-46925cgbkk
+        - name: CUSTOM_ENV_VARIABLE
+          value: Value defined by Kustomize ❤️
+        image: foo/bar:3.4.5
+        name: app
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP

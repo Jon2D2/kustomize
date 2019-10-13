@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  CNAME: CNAME.DOMAIN.COM
+  ZZZ: 80
+kind: ConfigMap
+metadata:
+  name: configmap

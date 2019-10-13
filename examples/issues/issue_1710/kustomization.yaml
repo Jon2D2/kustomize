@@ -1,0 +1,31 @@
+resources:
+- prometheus.yaml
+- catalog-source.yaml
+- service-monitor.yaml
+
+namespace: kustomizedns
+
+configurations:
+- kustomizeconfig/prometheus.yaml
+- kustomizeconfig/servicemonitor.yaml
+
+patchesStrategicMerge:
+- set-catalog-source-image.yaml
+- alert-ns-patch.yaml
+
+patchesJson6902:
+- target:
+    group: monitoring.coreos.com
+    version: v1
+    kind: ServiceMonitor
+    name: prometheus-service-monitor
+  path: set-svc-mon-ns.yaml
+
+vars:
+- name: NS
+  objref:
+    apiVersion: operators.coreos.com/v1alpha1
+    kind: CatalogSource
+    name: foocorp-operators-registry
+  fieldref:
+    fieldpath: metadata.namespace

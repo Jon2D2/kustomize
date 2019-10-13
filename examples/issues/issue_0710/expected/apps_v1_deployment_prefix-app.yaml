@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: appName
+  name: prefix-app
+  namespace: appName
+spec:
+  selector:
+    matchLabels:
+      app: appName
+  template:
+    metadata:
+      labels:
+        app: appName
+    spec:
+      containers:
+      - env:
+        - name: ANOTHERENV
+          value: ANOTHERVALUE
+        name: app
+        volumeMounts:
+        - mountPath: /path/to/file
+          name: config-volume
+      - image: anotherimage
+        name: anothercontainer
+      volumes:
+      - configMap:
+          name: config-79tktd9hkb
+        name: config-volume

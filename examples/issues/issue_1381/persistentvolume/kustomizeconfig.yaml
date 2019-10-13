@@ -1,0 +1,6 @@
+nameReference:
+- kind: PersistentVolume
+  version: v1
+  fieldSpecs:
+  - path: rules/resourceNames
+    kind: ClusterRole

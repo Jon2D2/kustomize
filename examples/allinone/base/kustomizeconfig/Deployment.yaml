@@ -1,0 +1,11 @@
+varReference:
+- kind: Deployment
+  path: spec/template/spec/containers/image
+- kind: Deployment
+  path: metadata/labels
+- kind: Deployment
+  path: spec/template/metadata/labels
+- kind: Deployment
+  path: spec/selector/matchLabels
+- kind: Deployment
+  path: spec/template/spec/initContainers

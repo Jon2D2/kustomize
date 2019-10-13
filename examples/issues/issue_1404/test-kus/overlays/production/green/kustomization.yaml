@@ -1,0 +1,7 @@
+commonAnnotations:
+    note: This is the production green environment
+nameSuffix: -green
+resources:
+  - ../../../base
+patchesStrategicMerge:
+  - deployment.yaml

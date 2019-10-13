@@ -1,0 +1,8 @@
+resources:
+- ./deploy.yaml
+namePrefix: lalala-
+
+secretGenerator:
+- name: xxx
+  literals:
+  - password=123456

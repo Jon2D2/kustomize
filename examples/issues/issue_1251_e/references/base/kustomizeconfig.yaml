@@ -1,0 +1,7 @@
+varReference:
+- path: spec/template/spec/containers[]/livenessProbe
+  kind: Deployment
+- path: spec/template/spec/dnsPolicy
+  kind: Deployment
+- path: spec/template/spec/restartPolicy
+  kind: Deployment

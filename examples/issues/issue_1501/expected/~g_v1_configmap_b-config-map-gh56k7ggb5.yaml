@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  b: "1"
+kind: ConfigMap
+metadata:
+  labels:
+    apps: b
+  name: b-config-map-gh56k7ggb5

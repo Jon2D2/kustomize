@@ -1,0 +1,12 @@
+resources:
+- ../base
+- dep-patch.yaml
+
+# vars: 
+# - name: Deployment.probe.spec.template.spec.containers[0].livenessProbe
+#   objref:
+#     kind: Deployment
+#     name: probe
+#     apiVersion: apps/v1
+#   fieldref:
+#     fieldpath: spec.template.spec.containers[0].livenessProbe

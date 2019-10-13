@@ -1,0 +1,10 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: dply2
+  namespace: default
+spec:
+  template:
+    metadata:
+      labels:
+        from: overlay

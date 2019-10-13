@@ -1,0 +1,11 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: bar
+  labels:
+    app: bar
+spec:
+  selector:
+    matchLabels:
+      app: bar
+  template: $(CUSTOM_TEMPLATE)

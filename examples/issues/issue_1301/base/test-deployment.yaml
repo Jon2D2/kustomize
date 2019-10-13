@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels:
+     app: component2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: component2
+  template:
+    metadata:
+      labels:
+        app: component2
+    spec:
+      containers:
+      - name: component2
+        image: k8s.gcr.io/busybox
+        command: [ "/bin/sh", "-c", "cat /etc/config/component2 && sleep 60" ]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          name: cafe-configmap

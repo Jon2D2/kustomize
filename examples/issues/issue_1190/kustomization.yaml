@@ -1,0 +1,14 @@
+resources:
+  - foo
+  - bar
+namePrefix: inlining-example-
+vars:
+  - name: CUSTOM_TEMPLATE
+    objref:
+      kind: Deployment
+      name: foo
+      apiVersion: apps/v1beta2
+    fieldref:
+      fieldpath: spec.template
+configurations:
+  - transformer.yaml

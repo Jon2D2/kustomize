@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: MyService
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  ports:
+    - port: $(Values.file1.spec.port)
+  selector:
+    app: mysql

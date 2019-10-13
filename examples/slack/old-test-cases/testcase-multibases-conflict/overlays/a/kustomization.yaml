@@ -1,0 +1,6 @@
+namePrefix: a-
+nameSuffix: -suffixA
+
+resources:
+- ../../base/
+- serviceaccount.yaml

@@ -1,0 +1,11 @@
+apiVersion: my.group.org/v1alpha1
+kind: EndpointCatalogue
+metadata:
+  name: dev-endpoints
+spec:
+  mysql:
+    labels:
+      app: mysql
+  wordpress:
+    labels:
+      app: wordpress

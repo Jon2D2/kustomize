@@ -1,0 +1,14 @@
+resources:
+- ../base2
+
+namespace: appName
+commonLabels:
+  app: appName
+
+patchesStrategicMerge:
+- app-other-deployment-patch.yaml
+
+configMapGenerator:
+- name: config
+  files:
+    - config-file.json

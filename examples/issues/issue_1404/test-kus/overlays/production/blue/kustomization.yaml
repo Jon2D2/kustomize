@@ -1,0 +1,7 @@
+commonAnnotations:
+    note: This is the production blue environment
+nameSuffix: -blue
+resources:
+  - ../../../base
+patchesStrategicMerge:
+  - deployment.yaml

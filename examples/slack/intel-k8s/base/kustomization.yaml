@@ -1,0 +1,5 @@
+resources:
+- crypto-perf-dpdk-pod-requesting-qat.yaml
+- intelfpga-job.yaml
+- intelgpu-job.yaml
+- openssl-qat-engine-pod.yaml

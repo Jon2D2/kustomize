@@ -1,0 +1,5 @@
+namespace: thenamespace
+resources:
+- resources.yaml
+configurations:
+- ./kustomizeconfig/mycrd.yaml

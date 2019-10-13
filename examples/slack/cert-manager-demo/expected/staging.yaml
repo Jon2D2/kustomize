@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app: helloweb-staging
+  name: helloweb-staging
+---
+apiVersion: v1
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvekNDQWVlZ0F3SUJBZ0lKQUp4Z0treUZnNks2TUEwR0NTcUdTSWIzRFFFQkN3VUFNQll4RkRBU0JnTlYKQkFNTUMyTnZiVzF2Ymw5dVlXMWxNQjRYRFRFNU1ETXhNVEV5TXprMU5sb1hEVEk1TURNd09ERXlNemsxTmxvdwpGakVVTUJJR0ExVUVBd3dMWTI5dGJXOXVYMjVoYldVd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3CmdnRUtBb0lCQVFESWlsTEpSUm9ST1JDMC85cGpPbkhwT1NVcm9GQVlmSzRUeUtuZ1NJamdZTmFDWEFWcXo1dHoKdzduckVJVWZpZWliMWswdjV4czcyWURJK05TM0pPOTVmWXNMSFE2VW0xWVI3dUk1amxBMHlOdGx6RFRoZHRpUwp5Vk1pVU1nWUR4OGtjMUI0MncwUVRBcFlBREE5ZFRUbDlNL2R3aERsUWVGWkRFWEIvN1BJSVo2TjZ2RFQ0UDQzCjE0N3JBYzlTQUtFM0ZYUmZuVXZmeWhzS1c4a056ZFpuaitGb1BNbGs2cjg3U096US9DSVIxNEE5bE9qMGUzS00KcjVNN3JYcWYwTnI3aExjT1hWN1hjSnNSMXRlcjRVQ2p1Ui9FMEk5Y1lmU1pEMFVXRmM3TTJrMko0MzdVNHZFMword1VUanpxVjZ0THBDNEd0TTRJc2dTYk03TjYvVWxDVkFnTUJBQUdqVURCT01CMEdBMVVkRGdRV0JCVHRmb3RHCnhTdXA1MUlNVGtGb2RhSVo4S1pHVlRBZkJnTlZIU01FR0RBV2dCVHRmb3RHeFN1cDUxSU1Ua0ZvZGFJWjhLWkcKVlRBTUJnTlZIUk1FQlRBREFRSC9NQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUJsV0pPMFNRejJncEg0bkpnUApnd1UrNDZSWndYcUpEdTRmcUx5WGpZTTlTWEl3T2FkeEQ0anpOSUdFMTBlejM1Mk1zM0NnOEM1NzBUUDFETXhXCjJTQytaeEdSazMvRFl4aGNJTmVaTFBsTTN0Tm1GYld3Q0JoZWpXZHJ1K21NcVpDbThDcVBrT25JRGRrT0JsRTQKeHBzRGNDNG9SK3Z1dHB1bzQ0d2lqUEQzV0RjbkNTT3plUlZUcC9XR1V3WWZTZVNUOVpaaXN4eUtjQjFRY3JDOApMUEdQcVVJL0FKV29ReWxJTi9RQVl2WGJzMlRHYU9EYWgrRnp2NDhCNkE1S3Qxd1pyQjBqSDJmenJna3g0Z3doCkRVL0tzelQ1ZUlNNUJ0aEJ4ZDBJMllVSllKcEQ1bnNHUTJCZGVwYW5PSWg3cUd3VWFLK0hwTkdrckNIYXduSy8KaHgvWAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBeUlwU3lVVWFFVGtRdFAvYVl6cHg2VGtsSzZCUUdIeXVFOGlwNEVpSTRHRFdnbHdGCmFzK2JjOE81NnhDRkg0bm9tOVpOTCtjYk85bUF5UGpVdHlUdmVYMkxDeDBPbEp0V0VlN2lPWTVRTk1qYlpjdzAKNFhiWWtzbFRJbERJR0E4ZkpITlFlTnNORUV3S1dBQXdQWFUwNWZUUDNjSVE1VUhoV1F4RndmK3p5Q0dlamVydwowK0QrTjllTzZ3SFBVZ0NoTnhWMFg1MUwzOG9iQ2x2SkRjM1daNC9oYUR6SlpPcS9PMGpzMFB3aUVkZUFQWlRvCjlIdHlqSytUTzYxNm45RGErNFMzRGwxZTEzQ2JFZGJYcStGQW83a2Z4TkNQWEdIMG1ROUZGaFhPek5wTmllTisKMU9MeE4vc0ZFNDg2bGVyUzZRdUJyVE9DTElFbXpPemV2MUpRbFFJREFRQUJBb0lCQVFDNlJsb05vSVZOR0MrZgpvTVJ2UlZ1SDRrL1hqU3E1QkI4Q08zTW41TmhYYXp2MWpKcHZrM1gyK3doWUExbFVhVnBLWHE0RjMrcVpGamljCjlSMUpIU0xnTzdBSzI2dXVkL2RqNHZ2NXNHcHFEV1JWMDNBUE9jQ0Q0RU83YlVQZnJUUWxQSU8wTHV5Y2hiVloKOXByWWkyVmVjSjhnZ21JRlFjT2JYbDN4akoybk40VnZZRjI5bm1tdG01dkNNeFUvamM1NkpUdUFvVTE3Wm1kdQpFYlpOdkVvUFhCcmF6ak5OZWM0bHFxWFFTMzZPT3lMeEpoVG92YU9uT2FDRWkvSEY4ZlFlZko1MUdZUXFHc0RKCkpoZUdFS1puMVI4dGFHaTNacFo2MG5nZVVnejFZS3JiR2RXZ0p6SS82N0RUbmk4Nk1CRTgxc25MWGdrUU82Q0EKajFIK3BiTEJBb0dCQVBHUlhGb3ZDWmhreEJsZDRzdUxxMUxmeTh2WnBLbUpJUTZTUUFuYVNMRGVjdE9HUlhIbwpXbko2eUhvL0pjODJwdVVydjFaa3NTR3JmMGxha2JldFY5YWFKWDZ1Zzh1Qk5PMnJ3MHhHQ1lSZG9pZjZyMlJSCnlaNVRubnZDNnNONm53RllZU0FqRVRVa2tKSkZ4cTBBcnpLTVZBTmJHZUJqNHJCaHFNWE5CV3NSQW9HQkFOU0YKZUpYcnNDYjc2c1JNQ2owTmtDSm1TeWs4bU9oVVI5V290R1lzSHRQUGZrd3VVb0V2RWtuVjd0bzhXSGVISmNCRAp3b3djaHk4NGZwYkFqN2JIQWVyZFhoS0lJUFhGMXNWTVQ0MUgrY1YvanNMYjQvUm05OS9YemF1RXNJTVlpMXVlCm12OWRKQzI3cUxmTXJuc0pMRUVOZ2xUQ09UekxxQk84V1pKZ015VkZBb0dBV3MrM2RSdXJzc05teU5aM2xPZEwKbjVzTUpQVUxwc1FyVGl3Q3NQR0RWQ0k3N25MU2xuQ3YxOHQ2cENJckY0dkhEKzN6UHdvWllMdjAzT0dVV0FWdApPUHEzejdqUlNPYW92QlJQRmRSYWJZMDVrV2YzR1hKNXBmQnZhcjBxdmhQUnhKS3g2SC9tVHlFUXpEdzQ1UDZWCjNoM00wM29pN3l6OW9pc0VaRitmZ3RFQ2dZQmRKVEs0NHRnTi9oUGpmVUJ2aWVaR2JYYzcxNmRkRExOL1hiWFQKb2pyUXN2eXovd21DUFZOU3NVVkN1WGc4eXlzc25ZWkRTcTJsY0tsckFYTDd0VFdON3dBd055SGJGcDhQVW1iNwprVFJUNzVodXAxbTk0UE43VkdaOGFtZkN6WnNteU5rK1cyQmordi96cnU0NlZzYmlyRDBYVVJrdElFWEdnS0x4Cm1PQlIwUUtCZ0RGWlVPMnV2YjlaRmExdTBpQ3R0M3hTSFJ0QzY2UWJrUWFuZU9VYzBRUjBabTZxWmoxdFNNYm0KZlJ3bFUrRGx1bU5zNFNCWHI5aWQwZFUrNU1tcjM4bGtiNzhyajRETUdOR2JKVmVnSjc2NjlxWHV2SklISVVFdgo2OVJqRlo4T2xCOXJYN2wvNFV5NVk1NHhEdmN3UXNub1pHQm5TN2llOG80OW5ZUmNSS2Y3Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+kind: Secret
+metadata:
+  labels:
+    app: helloweb-staging
+  name: ca-secret-staging-tbd8c845kt
+  namespace: helloweb-staging
+type: kubernetes.io/tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: helloweb-staging
+  name: helloweb-service-staging
+  namespace: helloweb-staging
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: helloweb-staging
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: helloweb-staging
+  name: helloweb-deployment-staging
+  namespace: helloweb-staging
+spec:
+  selector:
+    matchLabels:
+      app: helloweb-staging
+  template:
+    metadata:
+      labels:
+        app: helloweb-staging
+    spec:
+      containers:
+      - image: gcr.io/google-samples/hello-app:1.0
+        name: hello-app
+        ports:
+        - containerPort: 8080
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  labels:
+    app: helloweb-staging
+  name: certificate-staging
+  namespace: helloweb-staging
+spec:
+  commonName: staging.demo.example.net
+  dnsNames:
+  - staging.demo.example.net
+  issuerRef:
+    kind: Issuer
+    name: issuer-staging
+  renewBefore: 360h
+  secretName: secret-staging-demo
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  labels:
+    app: helloweb-staging
+  name: issuer-staging
+  namespace: helloweb-staging
+spec:
+  ca:
+    secretName: ca-secret-staging-tbd8c845kt
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: web-static-ip
+  labels:
+    app: helloweb-staging
+  name: ingress-staging
+  namespace: helloweb-staging
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: helloweb-service-staging
+          servicePort: 8080
+        path: /
+  tls:
+  - hosts:
+    - staging.demo.example.net
+    secretName: secret-staging-demo

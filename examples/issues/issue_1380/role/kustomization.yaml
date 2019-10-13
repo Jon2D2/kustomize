@@ -1,0 +1,4 @@
+namePrefix: prefix-for-role-
+
+resources:
+- resources.yaml

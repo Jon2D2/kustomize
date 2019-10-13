@@ -1,0 +1,4 @@
+namespace: bar
+resources:
+  # - ../../environment
+  - manifests/ingress.yaml

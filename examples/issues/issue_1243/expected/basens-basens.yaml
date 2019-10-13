@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dply1
+  name: dply1
+  namespace: base
+spec:
+  selector:
+    matchLabels:
+      app: dply1
+  template:
+    metadata:
+      labels:
+        app: dply1
+    spec:
+      containers:
+      - image: alpine
+        name: dply1
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: dply2
+  namespace: base
+spec:
+  template:
+    metadata:
+      labels:
+        from: overlay

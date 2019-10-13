@@ -1,0 +1,25 @@
+commonLabels:
+- path: spec/template/spec/affinity/podAffinity/preferredDuringSchedulingIgnoredDuringExecution/podAffinityTerm/labelSelector/matchLabels
+  create: false
+  group: apps
+  kind: Deployment
+  behavior: remove
+
+- path: spec/template/spec/affinity/podAffinity/requiredDuringSchedulingIgnoredDuringExecution/labelSelector/matchLabels
+  create: false
+  group: apps
+  kind: Deployment
+  behavior: remove
+
+- path: spec/template/spec/affinity/podAntiAffinity/preferredDuringSchedulingIgnoredDuringExecution/podAffinityTerm/labelSelector/matchLabels
+  create: false
+  group: apps
+  kind: Deployment
+  behavior: remove
+
+- path: spec/template/spec/affinity/podAntiAffinity/requiredDuringSchedulingIgnoredDuringExecution/labelSelector/matchLabels
+  create: false
+  group: apps
+  kind: Deployment
+  behavior: remove
+

@@ -1,0 +1,4 @@
+namespace: X
+
+resources:
+- dep.yaml

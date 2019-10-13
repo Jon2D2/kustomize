@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: bar
+spec:
+  rules:
+    - host: bar$(ConfigMap.environment.data.branch).$(ConfigMap.environment.data.name).$(ConfigMap.environment.data.domain)
+      http:
+        paths:
+        - backend:
+            serviceName: bar
+            servicePort: http
