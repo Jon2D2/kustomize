@@ -4,8 +4,13 @@
 # Makefile for kustomize CLI and API.
 
 MYGOBIN := $(shell go env GOPATH)/bin
+TOOLSBIN := $(PWD)/hack/tools/bin
+PATH := $(TOOLSBIN):$(MYGOBIN):$(PATH)
 SHELL := /bin/bash
-export PATH := $(MYGOBIN):$(PATH)
+
+.DEFAULT_GOAL := all
+
+export GO111MODULE=on
 
 .PHONY: all
 all: verify-kustomize
@@ -35,30 +40,29 @@ verify-kustomize-e2e: test-examples-e2e-kustomize
 # since everything uses the same implicit GOPATH.
 # This installs in a temp dir to avoid overwriting someone else's
 # linter, then installs in MYGOBIN with a new name.
-# Version pinned by hack/go.mod
-$(MYGOBIN)/golangci-lint-kustomize:
+# Version pinned by hack/tools/go.mod
+$(TOOLSBIN)/golangci-lint-kustomize:
 	( \
 		set -e; \
-		export GOBIN=$$(mktemp -d); \
-		cd hack; \
-		GO111MODULE=on go install github.com/golangci/golangci-lint/cmd/golangci-lint; \
-		mv $$GOBIN/golangci-lint $(MYGOBIN)/golangci-lint-kustomize \
+		cd hack/tools; \
+		GO111MODULE=on GOBIN=$(TOOLSBIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint; \
+		mv $(TOOLSBIN)/golangci-lint $(TOOLSBIN)/golangci-lint-kustomize \
 	)
 
-# Version pinned by api/go.mod
-$(MYGOBIN)/mdrip:
-	cd api; \
-	go install github.com/monopole/mdrip
+# Version pinned by hack/tools/go.mod
+$(TOOLSBIN)/mdrip:
+	cd hack/tools; \
+	GOBIN=$(TOOLSBIN) go install github.com/monopole/mdrip
 
-# Version pinned by api/go.mod
-$(MYGOBIN)/stringer:
-	cd api; \
-	go install golang.org/x/tools/cmd/stringer
+# Version pinned by hack/tools/go.mod
+$(TOOLSBIN)/stringer:
+	cd hack/tools; \
+	GOBIN=$(TOOLSBIN) go install golang.org/x/tools/cmd/stringer
 
-# Version pinned by api/go.mod
-$(MYGOBIN)/goimports:
-	cd api; \
-	go install golang.org/x/tools/cmd/goimports
+# Version pinned by hack/tools/go.mod
+$(TOOLSBIN)/goimports:
+	cd hack/tools; \
+	GOBIN=$(TOOLSBIN) go install golang.org/x/tools/cmd/goimports
 
 # Install resource from whatever is checked out.
 $(MYGOBIN)/resource:
@@ -66,24 +70,24 @@ $(MYGOBIN)/resource:
 	go install .
 
 # To pin pluginator, use this recipe instead:
-#   cd api;
-#   go install sigs.k8s.io/kustomize/pluginator/v2
-$(MYGOBIN)/pluginator:
+#	cd hack/tools; \
+#	GOBIN=$(TOOLSBIN) go install sigs.k8s.io/kustomize/pluginator/v2
+$(TOOLSBIN)/pluginator:
 	cd pluginator; \
-	go install .
+	GOBIN=$(TOOLSBIN) go install .
 
 # Install kustomize from whatever is checked out.
 $(MYGOBIN)/kustomize:
 	cd kustomize; \
-	go install .
+	GOBIN=$(TOOLSBIN) go install .
 
 .PHONY: install-tools
 install-tools: \
-	$(MYGOBIN)/goimports \
-	$(MYGOBIN)/golangci-lint-kustomize \
-	$(MYGOBIN)/mdrip \
-	$(MYGOBIN)/pluginator \
-	$(MYGOBIN)/stringer
+	$(TOOLSBIN)/goimports \
+	$(TOOLSBIN)/golangci-lint-kustomize \
+	$(TOOLSBIN)/mdrip \
+	$(TOOLSBIN)/pluginator \
+	$(TOOLSBIN)/stringer
 
 ### Begin kustomize plugin rules.
 #
@@ -155,38 +159,33 @@ $(pGen)/SecretGenerator.go: $(pSrc)/secretgenerator/SecretGenerator.go
 # The (verbose but portable) Makefile way to convert to lowercase.
 toLowerCase = $(subst A,a,$(subst B,b,$(subst C,c,$(subst D,d,$(subst E,e,$(subst F,f,$(subst G,g,$(subst H,h,$(subst I,i,$(subst J,j,$(subst K,k,$(subst L,l,$(subst M,m,$(subst N,n,$(subst O,o,$(subst P,p,$(subst Q,q,$(subst R,r,$(subst S,s,$(subst T,t,$(subst U,u,$(subst V,v,$(subst W,w,$(subst X,x,$(subst Y,y,$(subst Z,z,$1))))))))))))))))))))))))))
 
-$(pGen)/%.go: $(MYGOBIN)/pluginator
+$(pGen)/%.go: $(TOOLSBIN)/pluginator $(TOOLSBIN)/goimports
 	@echo "generating $*"
 	( \
 		set -e; \
 		cd $(pSrc)/$(call toLowerCase,$*); \
 		go generate .; \
 		cd ../../../$(pGen); \
-		$(MYGOBIN)/goimports -w $*.go \
+		$(TOOLSBIN)/goimports -w $*.go \
 	)
 
 # Target is for debugging.
 .PHONY: generate-kustomize-builtin-plugins
 generate-kustomize-builtin-plugins: $(builtinplugins)
 
-.PHONY: kustomize-external-go-plugin-build
-kustomize-external-go-plugin-build:
-	./hack/buildExternalGoPlugins.sh ./plugin
-
-.PHONY: kustomize-external-go-plugin-clean
-kustomize-external-go-plugin-clean:
-	./hack/buildExternalGoPlugins.sh ./plugin clean
-
 ### End kustomize plugin rules.
 
 .PHONY: lint-kustomize
 lint-kustomize: install-tools $(builtinplugins)
 	cd api; \
-	$(MYGOBIN)/golangci-lint-kustomize -c ../.golangci-kustomize.yml run ./...
+	$(TOOLSBIN)/golangci-lint-kustomize -c ../.golangci-kustomize.yml run ./...
 	cd kustomize; \
-	$(MYGOBIN)/golangci-lint-kustomize -c ../.golangci-kustomize.yml run ./...
+	$(TOOLSBIN)/golangci-lint-kustomize -c ../.golangci-kustomize.yml run ./...
 	cd pluginator; \
-	$(MYGOBIN)/golangci-lint-kustomize -c ../.golangci-kustomize.yml run ./...
+	$(TOOLSBIN)/golangci-lint-kustomize -c ../.golangci-kustomize.yml run ./...
+
+.PHONY: generate
+generate: $(builtinplugins)
 
 .PHONY: test-unit-kustomize-api
 test-unit-kustomize-api: $(builtinplugins)
@@ -212,30 +211,41 @@ test-unit-cmd-all:
 test-go-mod:
 	./travis/check-go-mod.sh
 
+COVER_FILE=coverage.out
+
+.PHONY: cover
+cover:
+	# The plugin directory eludes coverage, and is therefore omitted
+	cd api && go test ./... -coverprofile=$(COVER_FILE) && \
+	go tool cover -html=$(COVER_FILE)
+
 .PHONY:
-test-examples-kustomize-against-HEAD: $(MYGOBIN)/kustomize $(MYGOBIN)/mdrip
+test-examples-kustomize-against-HEAD: $(MYGOBIN)/kustomize $(TOOLSBIN)/mdrip
 	./hack/testExamplesAgainstKustomize.sh HEAD
 
 .PHONY:
 test-examples-e2e-kustomize: $(MYGOBIN)/mdrip $(MYGOBIN)/kind
 	( \
 		set -e; \
-		/bin/rm -f $(MYGOBIN)/kustomize; \
+		/bin/rm -f $(TOOLSBIN)/kustomize; \
 		echo "Installing kustomize from ."; \
 		cd kustomize; go install .; cd ..; \
+		echo "Installing resource from ."; \
+		cd cmd/resource; go install .; cd ../..; \
 		./hack/testExamplesE2EAgainstKustomize.sh .; \
 	)
 
 .PHONY:
-test-examples-kustomize-against-latest: $(MYGOBIN)/mdrip
+test-examples-kustomize-against-latest: $(TOOLSBIN)/mdrip
 	( \
 		set -e; \
-		/bin/rm -f $(MYGOBIN)/kustomize; \
+		/bin/rm -f $(TOOLSBIN)/kustomize; \
 		echo "Installing kustomize from latest."; \
-		GO111MODULE=on go install sigs.k8s.io/kustomize/kustomize/v3; \
+		GO111MODULE=on GOBIN=$(TOOLSBIN) go install sigs.k8s.io/kustomize/kustomize/v3; \
 		./hack/testExamplesAgainstKustomize.sh latest; \
 		echo "Reinstalling kustomize from HEAD."; \
-		cd kustomize; go install .; \
+		/bin/rm -f $(TOOLSBIN)/kustomize; \
+		cd kustomize; GOBIN=$(MYGOBIN) go install .; \
 	)
 
 # linux only.
@@ -244,13 +254,13 @@ test-examples-kustomize-against-latest: $(MYGOBIN)/mdrip
 # Don't want to add a hard dependence in go.mod file
 # to github.com/instrumenta/kubeval.
 # Instead, download the binary.
-$(MYGOBIN)/kubeval:
+$(TOOLSBIN)/kubeval:
 	( \
 		set -e; \
 		d=$(shell mktemp -d); cd $$d; \
 		wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz; \
 		tar xf kubeval-linux-amd64.tar.gz; \
-		mv kubeval $(MYGOBIN); \
+		mv kubeval $(TOOLSBIN); \
 		rm -rf $$d; \
 	)
 
@@ -260,33 +270,88 @@ $(MYGOBIN)/kubeval:
 # Don't want to add a hard dependence in go.mod file
 # to helm.
 # Instead, download the binary.
-$(MYGOBIN)/helm:
+$(TOOLSBIN)/helm:
 	( \
 		set -e; \
 		d=$(shell mktemp -d); cd $$d; \
-		wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz; \
-		tar -xvzf helm-v2.13.1-linux-amd64.tar.gz; \
-		mv linux-amd64/helm $(MYGOBIN); \
+		wget https://storage.googleapis.com/kubernetes-helm/helm-v2.16.0-linux-amd64.tar.gz; \
+		tar -xvzf helm-v2.16.0-linux-amd64.tar.gz; \
+		mv linux-amd64/helm $(TOOLSBIN); \
 		rm -rf $$d \
 	)
 
-$(MYGOBIN)/kind:
+$(TOOLSBIN)/kind:
 	( \
-        set -e; \
-        d=$(shell mktemp -d); cd $$d; \
-        wget -O ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(shell uname)-amd64; \
-        chmod +x ./kind; \
-        mv ./kind $(MYGOBIN); \
-        rm -rf $$d; \
+        	set -e; \
+        	d=$(shell mktemp -d); cd $$d; \
+        	wget -O ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-$(shell uname)-amd64; \
+        	chmod +x ./kind; \
+        	mv ./kind $(TOOLSBIN); \
+        	rm -rf $$d; \
 	)
 
+.PHONY: fmt-api
+fmt-api:
+	cd api; go fmt ./...
+
+.PHONY: fmt-kustomize
+fmt-kustomize:
+	cd kustomize; go fmt ./...
+
+.PHONY: fmt-pluginator
+fmt-pluginator:
+	cd pluginator; go fmt ./...
+
+.PHONY: fmt-plugins
+fmt-plugins:
+	cd plugin/builtin/prefixsuffixtransformer && go fmt ./...
+	cd plugin/builtin/replicacounttransformer && go fmt ./...
+	cd plugin/builtin/patchstrategicmergetransformer && go fmt ./...
+	cd plugin/builtin/imagetagtransformer && go fmt ./...
+	cd plugin/builtin/namespacetransformer && go fmt ./...
+	cd plugin/builtin/labeltransformer && go fmt ./...
+	cd plugin/builtin/legacyordertransformer && go fmt ./...
+	cd plugin/builtin/patchtransformer && go fmt ./...
+	cd plugin/builtin/configmapgenerator && go fmt ./...
+	cd plugin/builtin/inventorytransformer && go fmt ./...
+	cd plugin/builtin/annotationstransformer && go fmt ./...
+	cd plugin/builtin/secretgenerator && go fmt ./...
+	cd plugin/builtin/patchjson6902transformer && go fmt ./...
+	cd plugin/builtin/hashtransformer && go fmt ./...
+
+.PHONY: fmt
+fmt: fmt-api fmt-kustomize fmt-pluginator fmt-plugins
+
+.PHONY: modules
+modules:
+	./hack/doGoMod.sh tidy
+
+## --------------------------------------
+## Binaries
+## --------------------------------------
+
+.PHONY: build
+build:
+	cd pluginator && go build -o $(PLUGINATOR_NAME) .
+	cd kustomize && go build -o $(KUSTOMIZE_NAME) ./main.go
+
+.PHONY: install
+install: generate
+	cd pluginator && GOBIN=$(TOOLSBIN) go install $(PWD)/pluginator
+	cd kustomize && GOBIN=$(MYGOBIN) go install $(PWD)/kustomize
+
 .PHONY: clean
-clean: kustomize-external-go-plugin-clean
+clean:
 	go clean --cache
+	rm -f api/$(COVER_FILE)
 	rm -f $(builtinplugins)
-	rm -f $(MYGOBIN)/pluginator
 	rm -f $(MYGOBIN)/kustomize
-	rm -f $(MYGOBIN)/golangci-lint-kustomize
+	rm -f $(TOOLSBIN)/goimports
+	rm -f $(TOOLSBIN)/golangci-lint-kustomize
+	rm -f $(TOOLSBIN)/golangci-lint
+	rm -f $(TOOLSBIN)/mdrip
+	rm -f $(TOOLSBIN)/pluginator
+	rm -f $(TOOLSBIN)/stringer
 
 .PHONY: nuke
 nuke: clean

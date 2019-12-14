@@ -26,7 +26,7 @@ if onLinuxAndNotOnTravis; then
   echo "On linux, and not on travis, so running the notravis example tests."
 
   # Requires helm.
-  make $(go env GOPATH)/bin/helm
+  make $(pwd)/hack/tools/bin/helm
   mdrip --mode test \
       --label helmtest examples/chart.md
 fi

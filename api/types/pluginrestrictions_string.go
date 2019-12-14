@@ -13,13 +13,13 @@ func _() {
 	_ = x[PluginRestrictionsNone-2]
 }
 
-const _PluginRestrictions_name = "PluginRestrictionsUnknownPluginRestrictionsBuiltinsOnlyPluginRestrictionsNone"
+const _PluginRestrictionsName = "PluginRestrictionsUnknownPluginRestrictionsBuiltinsOnlyPluginRestrictionsNone"
 
-var _PluginRestrictions_index = [...]uint8{0, 25, 55, 77}
+var _PluginRestrictionsIndex = [...]uint8{0, 25, 55, 77}
 
 func (i PluginRestrictions) String() string {
-	if i < 0 || i >= PluginRestrictions(len(_PluginRestrictions_index)-1) {
+	if i < 0 || i >= PluginRestrictions(len(_PluginRestrictionsIndex)-1) {
 		return "PluginRestrictions(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _PluginRestrictions_name[_PluginRestrictions_index[i]:_PluginRestrictions_index[i+1]]
+	return _PluginRestrictionsName[_PluginRestrictionsIndex[i]:_PluginRestrictionsIndex[i+1]]
 }

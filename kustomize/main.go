@@ -7,7 +7,7 @@ package main
 import (
 	"os"
 
-	"sigs.k8s.io/kustomize/cmd/config/complete"
+	// "sigs.k8s.io/kustomize/cmd/config/complete"
 	"sigs.k8s.io/kustomize/kustomize/v3/internal/commands"
 
 	// initialize auth
@@ -18,7 +18,7 @@ import (
 
 func main() {
 	cmd := commands.NewDefaultCommand()
-	complete.Complete(cmd).Complete("kustomize")
+	// complete.Complete(cmd).Complete("kustomize")
 
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)

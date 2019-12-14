@@ -51,8 +51,8 @@ function scanDir {
 
 if onLinuxAndNotOnTravis; then
   # Some of these tests have special deps.
-  make $(go env GOPATH)/bin/helm
-  make $(go env GOPATH)/bin/kubeval
+  make $(pwd)/hack/tools/bin/helm
+  make $(pwd)/hack/tools/bin/kubeval
 fi
 
 for goMod in $(find ./plugin -name 'go.mod'); do

@@ -41,16 +41,6 @@ func DeterminePluginSrcRoot(fSys filesys.FileSystem) (string, error) {
 					return filepath.Clean(
 						filepath.Join(
 							os.Getenv("PWD"),
-							"..", "..",
-							konfig.RelPluginHome))
-				},
-			},
-			{
-				Note: "relative to unit test (internal pkg)",
-				F: func() string {
-					return filepath.Clean(
-						filepath.Join(
-							os.Getenv("PWD"),
 							"..", "..", "..", "..",
 							konfig.RelPluginHome))
 				},
@@ -79,6 +69,16 @@ func DeterminePluginSrcRoot(fSys filesys.FileSystem) (string, error) {
 				F: func() string {
 					return filepath.Join(
 						konfig.HomeDir(), "gopath",
+						"src", konfig.DomainName,
+						konfig.ProgramName, konfig.RelPluginHome)
+				},
+			},
+			{
+				// travis_precommit.sh unsets the GOPATH
+				Note: "HOME with literal 'go'",
+				F: func() string {
+					return filepath.Join(
+						konfig.HomeDir(), "go",
 						"src", konfig.DomainName,
 						konfig.ProgramName, konfig.RelPluginHome)
 				},

@@ -1,186 +1,89 @@
-# kustomize
+# kustomize++
 
-`kustomize` lets you customize raw, template-free YAML
-files for multiple purposes, leaving the original YAML
-untouched and usable as is.
+This is a fork of [kustomize](https://github.com/keleustes/kustomize/tree/allinone/examples/issues) based on the api/v0.3.0 (20191212)
 
-`kustomize` targets kubernetes; it understands and can
-patch [kubernetes style] API objects.  It's like
-[`make`], in that what it does is declared in a file,
-and it's like [`sed`], in that it emits edited text.
+The kustomization.yaml syntax is identical to the upstream repo.
 
-This tool is sponsored by [sig-cli] ([KEP]), and
-inspired by [DAM].
+The allinone branch of this fork supports brings 5 main additional features.
 
+Those features were build overtime to fullfill the needs of users
+struggling to use kustomize at scale.
+Very often the issue has been reproduced and a feature test added
+to validate that there was a simple solution available:
+[Feature Test](https://github.com/keleustes/kustomize/tree/allinone/examples/issues)
 
-[![Build Status](https://travis-ci.org/kubernetes-sigs/kustomize.svg?branch=master)](https://travis-ci.org/kubernetes-sigs/kustomize)
-[![Go Report Card](https://goreportcard.com/badge/github.com/kubernetes-sigs/kustomize)](https://goreportcard.com/report/github.com/kubernetes-sigs/kustomize)
+The intend is to remove the fork once those features are
+available (even another form) as long as it is manageable by the
+user and he does not end up with managing 1000 lines kustomization.yaml 
 
-Download a binary from the [release page], or see
-these [instructions](docs/INSTALL.md).
+## Feature 1: Support for CRD Strategic Merge Patch
 
-Browse the [docs](docs) or jump right into the
-tested [examples](examples).
+CRDs are now everywhere in kubernetes based projects..OpenShift, Istio, Argo, ...
 
-## kubectl integration
+StrategicMergePatch for CRDs is supported (as opposed to JMP and JsonPatch) 
+like Kubernetes 1.16 does as long you can register your Scheme in 
+the kustomize global Scheme.
 
-Since [v1.14][kubectl announcement] the kustomize build system has been included in kubectl.
+[Registration](https://github.com/keleustes/kustomize/blob/airshipctl/kustomize/register/RolloutCRDRegister.go#L20)
+[Examples of usage](https://github.com/keleustes/kustomize/tree/airshipctl/examples/crds)
 
-| kubectl version | kustomize version |
-|---------|--------|
-| v1.16.0 | [v2.0.3](/../../tree/v2.0.3) |
-| v1.15.x | [v2.0.3](/../../tree/v2.0.3) |
-| v1.14.x | [v2.0.3](/../../tree/v2.0.3) |
+The upstream version of kustomize is silently using different merge strategy
+depending on the kind of your resource.
 
-For examples and guides for using the kubectl integration please see the [kubectl book] or the [kubernetes documentation].
+Moreover the current attempt to replace the kubernetes code by kyaml currently
+prevent any consumer of the kustomize API library from addressing the issue.
 
-## Usage
+## Feature 2: Support for Default Transformers Configuration adjustments
 
+Let's you adjust default transformers behavior. For instance,
+You can add, update, or remove/skip transformations performed
+by the commonLabels transformer without having to copy/paste the entire
+default configuration of the transformer.
 
-### 1) Make a [kustomization] file
+## Feature 3: Let you control the order of the K8s resources in the output
 
-In some directory containing your YAML [resource]
-files (deployments, services, configmaps, etc.), create a
-[kustomization] file.
+If you can sort and filter your resources at build time. THis allows you
+to add your ClusterWide CRD at the right place.
 
-This file should declare those resources, and any
-customization to apply to them, e.g. _add a common
-label_.
+To ease the creation:
 
-![base image][imageBase]
-
-File structure:
-
-> ```
-> ~/someApp
-> ├── deployment.yaml
-> ├── kustomization.yaml
-> └── service.yaml
-> ```
-
-The resources in this directory could be a fork of
-someone else's configuration.  If so, you can easily
-rebase from the source material to capture
-improvements, because you don't modify the resources
-directly.
-
-Generate customized YAML with:
-
-```
-kustomize build ~/someApp
+```bash
+kustomize build <xxx> --reorder=kubectlapply | kubectl apply -f -
 ```
 
-The YAML can be directly [applied] to a cluster:
+To ease the deletion:
 
-> ```
-> kustomize build ~/someApp | kubectl apply -f -
-> ```
-
-
-### 2) Create [variants] using [overlays]
-
-Manage traditional [variants] of a configuration - like
-_development_, _staging_ and _production_ - using
-[overlays] that modify a common [base].
-
-![overlay image][imageOverlay]
-
-File structure:
-> ```
-> ~/someApp
-> ├── base
-> │   ├── deployment.yaml
-> │   ├── kustomization.yaml
-> │   └── service.yaml
-> └── overlays
->     ├── development
->     │   ├── cpu_count.yaml
->     │   ├── kustomization.yaml
->     │   └── replica_count.yaml
->     └── production
->         ├── cpu_count.yaml
->         ├── kustomization.yaml
->         └── replica_count.yaml
-> ```
-
-Take the work from step (1) above, move it into a
-`someApp` subdirectory called `base`, then
-place overlays in a sibling directory.
-
-An overlay is just another kustomization, referring to
-the base, and referring to patches to apply to that
-base.
-
-This arrangement makes it easy to manage your
-configuration with `git`.  The base could have files
-from an upstream repository managed by someone else.
-The overlays could be in a repository you own.
-Arranging the repo clones as siblings on disk avoids
-the need for git submodules (though that works fine, if
-you are a submodule fan).
-
-Generate YAML with
-
-```sh
-kustomize build ~/someApp/overlays/production
+```bash
+kustomize build <xxx> --reorder=kubectldelete | kubectl delete -f -
 ```
 
-The YAML can be directly [applied] to a cluster:
+## Feature 4: Let you refer/inline field from on K8s Resource to another.
 
-> ```sh
-> kustomize build ~/someApp/overlays/production | kubectl apply -f -
-> ```
+You can refer the field value from one Kubernetes in another in one simple line.
+No need for error prone var and varReference declaration, 
+nor to create an unwanted ConfigMap just to be able to share a value accross Resources.
+This is also verify useful to need end up doing something like
 
-## Community
+```bash
+kustomize build <xxx> | envsubst
+```
+```bash
+kustomize build <xxx> | <somepythonscript.py
+```
 
-To file bugs please read [this](docs/bugs.md).
+For instance: 
 
-Before working on an implementation, please
+```yaml
+HorizontalPodScaler:
+metadata:
+  name: my-hpa
+spec:
+  minReplicas: $(Deployment.my-deployment.spec.replicas) 
+```
 
- * Read the [eschewed feature list].
- * File an issue describing
-   how the new feature would behave
-   and label it [kind/feature].
+## Feature 5: Diamond based import and Composition.
 
-### Other communication channels
+Also not perfect yet, this feature lets you create common resources that you
+can import in the different components of your application (for instance log, db, prometheus, ingres) before
+composing your application from those components.
 
-- [Slack]
-- [Mailing List]
-- General kubernetes [community page]
-
-### Code of conduct
-
-Participation in the Kubernetes community
-is governed by the [Kubernetes Code of Conduct].
-
-[`make`]: https://www.gnu.org/software/make
-[`sed`]: https://www.gnu.org/software/sed
-[DAM]: docs/glossary.md#declarative-application-management
-[KEP]: https://github.com/kubernetes/enhancements/blob/master/keps/sig-cli/0008-kustomize.md
-[Kubernetes Code of Conduct]: code-of-conduct.md
-[Mailing List]: https://groups.google.com/forum/#!forum/kubernetes-sig-cli
-[Slack]: https://kubernetes.slack.com/messages/sig-cli
-[applied]: docs/glossary.md#apply
-[base]: docs/glossary.md#base
-[community page]: http://kubernetes.io/community/
-[declarative configuration]: docs/glossary.md#declarative-application-management
-[eschewed feature list]: docs/eschewedFeatures.md
-[imageBase]: docs/images/base.jpg
-[imageOverlay]: docs/images/overlay.jpg
-[kind/feature]: /../../labels/kind%2Ffeature
-[kubectl announcement]: https://kubernetes.io/blog/2019/03/25/kubernetes-1-14-release-announcement
-[kubectl book]: https://kubectl.docs.kubernetes.io/pages/app_customization/introduction.html
-[kubernetes documentation]: https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/
-[kubernetes style]: docs/glossary.md#kubernetes-style-object
-[kustomization]: docs/glossary.md#kustomization
-[overlay]: docs/glossary.md#overlay
-[overlays]: docs/glossary.md#overlay
-[release page]: /../../releases
-[resource]: docs/glossary.md#resource
-[resources]: docs/glossary.md#resource
-[sig-cli]: https://github.com/kubernetes/community/blob/master/sig-cli/README.md
-[variant]: docs/glossary.md#variant
-[variants]: docs/glossary.md#variant
-[v2.0.3]: /../../releases/tag/v2.0.3
-[v2.1.0]: /../../releases/tag/v2.1.0
-[workflows]: docs/workflows.md
