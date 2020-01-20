@@ -9,14 +9,16 @@ import (
 
 	// "sigs.k8s.io/kustomize/cmd/config/complete"
 	"sigs.k8s.io/kustomize/kustomize/v3/internal/commands"
-
 	// initialize auth
 	// This is here rather than in the libraries because of
 	// https://github.com/kubernetes-sigs/kustomize/issues/2060
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	// _ "k8s.io/client-go/plugin/pkg/client/auth"
+	"sigs.k8s.io/kustomize/kustomize/v3/register"
 )
 
 func main() {
+	register.RegisterCoreKinds()
+
 	cmd := commands.NewDefaultCommand()
 	// complete.Complete(cmd).Complete("kustomize")
 

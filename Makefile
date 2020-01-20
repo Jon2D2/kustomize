@@ -341,6 +341,10 @@ build:
 	cd pluginator && go build -o $(PLUGINATOR_NAME) .
 	cd kustomize && go build -o $(KUSTOMIZE_NAME) ./main.go
 
+.PHONY: build-registers
+build-registers:
+	./kustomize/buildRegisters.sh $(GOPATH)
+
 .PHONY: install
 install: generate
 	cd pluginator && GOBIN=$(TOOLSBIN) go install $(PWD)/pluginator
