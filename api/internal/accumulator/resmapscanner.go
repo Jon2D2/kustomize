@@ -246,6 +246,7 @@ func (rv *ResMapScanner) BuildAutoConfig(m resmap.ResMap) {
 
 					// If either the var or the varReference were previously added
 					// by the user, let's trust the user and ignore that variable.
+					varRefConfig := types.FieldSpecConfig{FieldSpec: *varReference, Behavior: ""}
 					// if rv.manualVars.Contains(*tVar) || rv.manualRefs.contains(*varReference) {
 					err = rv.manualVars.Absorb(*tVar)
 					if err != nil {
@@ -262,7 +263,7 @@ func (rv *ResMapScanner) BuildAutoConfig(m resmap.ResMap) {
 					rv.autoVars.Merge(*tVar)
 					// we can safely ignore this error since we've already
 					// checked for collisions
-					rv.autoRefs, _ = rv.autoRefs.MergeOne(*varReference)
+					rv.autoRefs, _ = rv.autoRefs.MergeOne(varRefConfig)
 					matched[0].AbsorbRefVarName(*tVar)
 				}
 			}

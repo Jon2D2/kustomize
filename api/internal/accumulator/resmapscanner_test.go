@@ -42,7 +42,7 @@ var catalog = types.Target{
 
 // newVarRefSlice sorts the types.FsSlice according to the path
 // instead of the GVK (see fielspec.go)
-func newVarRefSlice(fs []types.FieldSpec) types.FsSlice {
+func newVarRefSlice(fs types.FieldSpecs) types.FieldSpecs {
 	va := make([]types.FieldSpec, len(fs))
 	copy(va, fs)
 	sort.Slice(va, func(i, j int) bool {
@@ -110,9 +110,9 @@ func TestResMapScanner(t *testing.T) {
 						FieldRef: types.FieldSelector{FieldPath: "spec.key1"}},
 				},
 				varReference: types.FsSlice{
-					{Gvk: cmap, Path: `metadata/annotations/my.org`},
-					{Gvk: cmap, Path: `metadata/annotations/my\/org`},
-					{Gvk: cmap, Path: `data/item1`},
+					{FieldSpec: types.FieldSpec{Gvk: cmap, Path: `metadata/annotations/my.org`}},
+					{FieldSpec: types.FieldSpec{Gvk: cmap, Path: `metadata/annotations/my\/org`}},
+					{FieldSpec: types.FieldSpec{Gvk: cmap, Path: `data/item1`}},
 				},
 			},
 		},
@@ -150,7 +150,7 @@ func TestResMapScanner(t *testing.T) {
 						FieldRef: types.FieldSelector{FieldPath: "spec.key1"}},
 				},
 				varReference: types.FsSlice{
-					{Gvk: cmap, Path: "data"},
+					{FieldSpec: types.FieldSpec{Gvk: cmap, Path: "data"}},
 				},
 			},
 		},
@@ -204,7 +204,7 @@ func TestResMapScanner(t *testing.T) {
 						FieldRef: types.FieldSelector{FieldPath: "spec.key2"}},
 				},
 				varReference: types.FsSlice{
-					{Gvk: cmap, Path: "data/someslice/item2"},
+					{FieldSpec: types.FieldSpec{Gvk: cmap, Path: "data/someslice/item2"}},
 				},
 			},
 		},
@@ -236,7 +236,7 @@ func TestResMapScanner(t *testing.T) {
 						FieldRef: types.FieldSelector{FieldPath: "spec.someotherfield"}},
 				},
 				manualRefs: types.FsSlice{
-					{Gvk: cmap, Path: "data/somefield"},
+					{FieldSpec: types.FieldSpec{Gvk: cmap, Path: "data/somefield"}},
 				},
 			},
 			expected: expected{
@@ -257,7 +257,7 @@ func TestResMapScanner(t *testing.T) {
 			tr.BuildAutoConfig(tc.given.toScan)
 
 			// assert
-			va, ve := newVarRefSlice(tr.DiscoveredConfig().VarReference), newVarRefSlice(tc.expected.varReference)
+			va, ve := newVarRefSlice(tr.DiscoveredConfig().VarReferenceFieldSpecs()), newVarRefSlice(types.NewFieldSpecs(tc.expected.varReference))
 			if !reflect.DeepEqual(va, ve) {
 				t.Fatalf("VarReference actual doesn't match expected: \nACTUAL:\n%v\nEXPECTED:\n%v", va, ve)
 			}

@@ -433,7 +433,7 @@ func TestRefVarTransformer(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
 			// arrange
-			tr := newRefVarTransformer(tc.given.varMap, tc.given.fs)
+			tr := newRefVarTransformer(NewVarMap(tc.given.varMap), tc.given.fs)
 
 			// act
 			err := tr.Transform(tc.given.res)
