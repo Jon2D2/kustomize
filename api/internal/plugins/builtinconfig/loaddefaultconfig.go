@@ -11,8 +11,8 @@ import (
 // loadDefaultConfig returns a TranformerConfig
 // object from a list of files.
 func loadDefaultConfig(
+	result *TransformerConfig,
 	ldr ifc.Loader, paths []string) (*TransformerConfig, error) {
-	result := &TransformerConfig{}
 	for _, path := range paths {
 		data, err := ldr.Load(path)
 		if err != nil {

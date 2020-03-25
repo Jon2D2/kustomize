@@ -1,7 +1,7 @@
 // Copyright 2019 The Kubernetes Authors.
 // SPDX-License-Identifier: Apache-2.0
 
-package types_test
+package types
 
 import (
 	"fmt"
@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"sigs.k8s.io/kustomize/api/resid"
-	. "sigs.k8s.io/kustomize/api/types"
 )
 
 func TestPathSlice(t *testing.T) {
@@ -48,39 +47,57 @@ var mergeTests = []struct {
 		"normal",
 		FsSlice{
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "apple"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "apple"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "pear"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "pear"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 		},
 		FsSlice{
 			{
-				Path:               "home",
-				Gvk:                resid.Gvk{Group: "beans"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "home",
+					Gvk:                resid.Gvk{Group: "beans"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 		},
 		nil,
 		FsSlice{
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "apple"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "apple"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
 			},
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "pear"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "pear"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
 			},
 			{
-				Path:               "home",
-				Gvk:                resid.Gvk{Group: "beans"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "home",
+					Gvk:                resid.Gvk{Group: "beans"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
 			},
 		},
 	},
@@ -88,34 +105,49 @@ var mergeTests = []struct {
 		"ignore copy",
 		FsSlice{
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "apple"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "apple"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "pear"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "pear"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 		},
 		FsSlice{
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "apple"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "apple"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 		},
 		nil,
 		FsSlice{
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "apple"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "apple"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
 			},
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "pear"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "pear"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
 			},
 		},
 	},
@@ -123,31 +155,194 @@ var mergeTests = []struct {
 		"error on conflict",
 		FsSlice{
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "apple"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "apple"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "pear"},
-				CreateIfNotPresent: false,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "pear"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
 			},
 		},
 		FsSlice{
 			{
-				Path:               "whatever",
-				Gvk:                resid.Gvk{Group: "apple"},
-				CreateIfNotPresent: true,
+				FieldSpec: FieldSpec{
+					Path:               "whatever",
+					Gvk:                resid.Gvk{Group: "apple"},
+					CreateIfNotPresent: true,
+				},
+				Behavior: "add",
 			},
 		},
 		fmt.Errorf("hey"),
 		FsSlice{},
 	},
+	{
+		"remove",
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field1",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
+			},
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field2",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
+			},
+		},
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path: "spec/field1",
+					Gvk:  resid.Gvk{Kind: "MyCRD"},
+				},
+				Behavior: "remove",
+			},
+		},
+		nil,
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field2",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
+			},
+		},
+	},
+	{
+		"remove2",
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "metadata/labels",
+					CreateIfNotPresent: true,
+				},
+			},
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/template/spec/affinity/podAffinity/preferredDuringSchedulingIgnoredDuringExecution/podAffinityTerm/labelSelector/matchLabels",
+					Gvk:                resid.Gvk{Kind: "Deployment", Group: "apps"},
+					CreateIfNotPresent: false,
+				},
+			},
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/template/spec/affinity/podAffinity/requiredDuringSchedulingIgnoredDuringExecution/labelSelector/matchLabels",
+					Gvk:                resid.Gvk{Kind: "Deployment", Group: "apps"},
+					CreateIfNotPresent: false,
+				},
+			},
+		},
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/template/spec/affinity/podAffinity/preferredDuringSchedulingIgnoredDuringExecution/podAffinityTerm/labelSelector/matchLabels",
+					Gvk:                resid.Gvk{Kind: "Deployment", Group: "apps"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "remove",
+			},
+		},
+		nil,
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "metadata/labels",
+					CreateIfNotPresent: true,
+				},
+				Behavior: "",
+			},
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/template/spec/affinity/podAffinity/requiredDuringSchedulingIgnoredDuringExecution/labelSelector/matchLabels",
+					Gvk:                resid.Gvk{Kind: "Deployment", Group: "apps"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
+			},
+		},
+	},
+	{
+		"replace",
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field1",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
+			},
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field2",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "add",
+			},
+		},
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field2",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: true,
+				},
+				Behavior: "replace",
+			},
+		},
+		nil,
+		FsSlice{
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field1",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: false,
+				},
+				Behavior: "",
+			},
+			{
+				FieldSpec: FieldSpec{
+					Path:               "spec/field2",
+					Gvk:                resid.Gvk{Kind: "MyCRD"},
+					CreateIfNotPresent: true,
+				},
+				Behavior: "",
+			},
+		},
+	},
 }
 
 func TestFsSlice_MergeAll(t *testing.T) {
 	for _, item := range mergeTests {
-		result, err := item.original.MergeAll(item.incoming)
+		result := FsSlice{}
+		var err error
+
+		// Normalize and merge original FsSlice
+		result, err = result.MergeAll(item.original)
+		if err != nil {
+			t.Fatalf("test %s: unexpected err %v", item.name, err)
+		}
+
+		// Normalize and merge incoming FsSlice
+		result, err = result.MergeAll(item.incoming)
 		if item.err == nil {
 			if err != nil {
 				t.Fatalf("test %s: unexpected err %v", item.name, err)

@@ -165,7 +165,7 @@ func (ra *ResAccumulator) ResolveVars() error {
 		return nil
 	}
 	t := newRefVarTransformer(
-		replacementMap, ra.tConfig.VarReference)
+		replacementMap, ra.tConfig.VarReferenceFieldSpecs())
 	err = ra.Transform(t)
 	if len(t.UnusedVars()) > 0 {
 		log.Printf(

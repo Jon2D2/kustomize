@@ -63,8 +63,9 @@ func (th Harness) MakeDefaultOptions() krusty.Options {
 // This has no impact on Builtin plugins, as they are always enabled.
 func (th Harness) MakeOptionsPluginsDisabled() krusty.Options {
 	return krusty.Options{
-		LoadRestrictions: types.LoadRestrictionsRootOnly,
-		PluginConfig:     konfig.DisabledPluginConfig(),
+		RerorderTransformer: "none",
+		LoadRestrictions:    types.LoadRestrictionsRootOnly,
+		PluginConfig:        konfig.DisabledPluginConfig(),
 	}
 }
 
@@ -80,8 +81,9 @@ func (th Harness) MakeOptionsPluginsEnabled() krusty.Options {
 		th.t.Fatal(err)
 	}
 	return krusty.Options{
-		LoadRestrictions: types.LoadRestrictionsRootOnly,
-		PluginConfig:     c,
+		RerorderTransformer: "none",
+		LoadRestrictions:    types.LoadRestrictionsRootOnly,
+		PluginConfig:        c,
 	}
 }
 

@@ -4,13 +4,14 @@
 package builtinconfig
 
 import (
+	"sort"
 	"strings"
 
 	"sigs.k8s.io/kustomize/api/resid"
 	"sigs.k8s.io/kustomize/api/types"
 )
 
-// NameBackReferences is an association between a gvk.GVK and a list
+// NameBackReferences is an association between a resid.GVK and a list
 // of FieldSpec instances that could refer to it.
 //
 // It is used to handle name changes, and can be thought of as a
@@ -90,4 +91,44 @@ func (s nbrSlice) mergeOne(other NameBackReferences) (nbrSlice, error) {
 		result = append(result, other)
 	}
 	return result, nil
+}
+
+type FieldPathMap map[string]resid.GvkSlice
+
+// NewFieldPathMapFromSlice creates a map[fieldPath] of Referee Gvk slices from
+// the NameBackReferences passed in parameter. It uses the Gvk of the referrer
+// to filter out the NameBackReferences.
+func NewFieldPathMapFromSlice(backRefs []NameBackReferences, x resid.Gvk) FieldPathMap {
+	// Let's select the fields that contain names
+	byFieldPath := make(map[string]resid.GvkSlice)
+	for _, target := range backRefs {
+		res := types.NewFieldSpecs(target.FieldSpecs)
+		res = res.ApplicableFieldSpecs(x)
+
+		for _, fSpec := range res {
+			// Normalize the  path first to ensure we have
+			/// a consistent key.
+			normalizedPath := fSpec.NormalizePath()
+			if _, found := byFieldPath[normalizedPath]; !found {
+				byFieldPath[normalizedPath] = []resid.Gvk{}
+			}
+
+			targetGvk := resid.Gvk{
+				Group:   target.Group,
+				Version: target.Version,
+				Kind:    target.Kind,
+			}
+			byFieldPath[normalizedPath] = append(byFieldPath[normalizedPath], targetGvk)
+		}
+	}
+	return byFieldPath
+}
+
+// Normalize detects the conflict in the FieldSpec Slice
+// and compress the slice a much as possible
+// todo(jeb): Implement the function
+func (fpm FieldPathMap) Normalize() {
+	for fieldPath := range fpm {
+		sort.Sort(fpm[fieldPath])
+	}
 }

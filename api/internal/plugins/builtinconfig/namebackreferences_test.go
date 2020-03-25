@@ -12,37 +12,37 @@ import (
 )
 
 func TestMergeAll(t *testing.T) {
-	fsSlice1 := []types.FieldSpec{
-		{
+	fsSlice1 := []types.FieldSpecConfig{
+		{FieldSpec: types.FieldSpec{
 			Gvk: resid.Gvk{
 				Kind: "Pod",
 			},
 			Path:               "path/to/a/name",
 			CreateIfNotPresent: false,
-		},
-		{
+		}},
+		{FieldSpec: types.FieldSpec{
 			Gvk: resid.Gvk{
 				Kind: "Deployment",
 			},
 			Path:               "another/path/to/some/name",
 			CreateIfNotPresent: false,
-		},
+		}},
 	}
-	fsSlice2 := []types.FieldSpec{
-		{
+	fsSlice2 := []types.FieldSpecConfig{
+		{FieldSpec: types.FieldSpec{
 			Gvk: resid.Gvk{
 				Kind: "Job",
 			},
 			Path:               "morepath/to/name",
 			CreateIfNotPresent: false,
-		},
-		{
+		}},
+		{FieldSpec: types.FieldSpec{
 			Gvk: resid.Gvk{
 				Kind: "StatefulSet",
 			},
 			Path:               "yet/another/path/to/a/name",
 			CreateIfNotPresent: false,
-		},
+		}},
 	}
 
 	nbrsSlice1 := nbrSlice{
