@@ -9,14 +9,52 @@ import (
 )
 
 var kunstructured = NewKunstructuredFactoryImpl().FromMap(map[string]interface{}{
-	"Kind": "Service",
+	"apiVersion": "apps/v1",
+	"kind":       "Deployment",
 	"metadata": map[string]interface{}{
 		"labels": map[string]interface{}{
-			"app": "application-name",
+			"app":        "simple-label",
+			"foo.io/env": "production",
 		},
-		"name": "service-name",
+		"name": "simple-dep",
 	},
 	"spec": map[string]interface{}{
+		"replicas": int64(1),
+		"selector": map[string]interface{}{
+			"matchLabels": map[string]interface{}{
+				"app":        "simple-label",
+				"foo.io/env": "production",
+			},
+		},
+		"template": map[string]interface{}{
+			"metadata": map[string]interface{}{
+				"labels": map[string]interface{}{
+					"app":        "simple-label",
+					"foo.io/env": "production",
+				},
+			},
+			"spec": map[string]interface{}{
+				"serviceAccountName": "simple-sa",
+				"containers": []interface{}{
+					map[string]interface{}{
+						"name":  "main",
+						"image": "main-image:v1.1.0",
+						"args": []interface{}{
+							"main-arg1",
+							"main-arg2",
+						},
+					},
+					map[string]interface{}{
+						"name":  "sidecar",
+						"image": "sidecar-image:v1.1.0",
+						"args": []interface{}{
+							"sidecar-arg1",
+							"sidecar-arg2",
+						},
+					},
+				},
+			},
+		},
 		"ports": map[string]interface{}{
 			"port": int64(80),
 		},
@@ -142,14 +180,14 @@ func TestGetFieldValue(t *testing.T) {
 	}{
 		{
 			name:          "oneField",
-			pathToField:   "Kind",
-			expectedValue: "Service",
+			pathToField:   "kind",
+			expectedValue: "Deployment",
 			errorExpected: false,
 		},
 		{
 			name:          "twoFields",
 			pathToField:   "metadata.name",
-			expectedValue: "service-name",
+			expectedValue: "simple-dep",
 			errorExpected: false,
 		},
 		{
@@ -294,7 +332,13 @@ func TestGetFieldValue(t *testing.T) {
 			name:          "validDownwardAPILabels",
 			pathToField:   `metadata.labels["app"]`,
 			errorExpected: false,
-			expectedValue: "application-name",
+			expectedValue: "simple-label",
+		},
+		{
+			name:          "validDownwardAPILabels2",
+			pathToField:   `metadata.labels["foo.io/env"]`,
+			errorExpected: false,
+			expectedValue: "production",
 		},
 		{
 			name:          "validDownwardAPISpecs",
@@ -363,14 +407,14 @@ func TestGetString(t *testing.T) {
 	}{
 		{
 			name:          "oneField",
-			pathToField:   "Kind",
-			expectedValue: "Service",
+			pathToField:   "kind",
+			expectedValue: "Deployment",
 			errorExpected: false,
 		},
 		{
 			name:          "twoFields",
 			pathToField:   "metadata.name",
-			expectedValue: "service-name",
+			expectedValue: "simple-dep",
 			errorExpected: false,
 		},
 		{
@@ -449,7 +493,31 @@ func TestGetString(t *testing.T) {
 			name:          "validDownwardAPIField",
 			pathToField:   `metadata.labels["app"]`,
 			errorExpected: false,
-			expectedValue: "application-name",
+			expectedValue: "simple-label",
+		},
+		{
+			name:          "validDownwardAPIField2",
+			pathToField:   `spec.template.spec.containers[name=main].image`,
+			errorExpected: false,
+			expectedValue: "main-image:v1.1.0",
+		},
+		{
+			name:          "validDownwardAPIField3",
+			pathToField:   `spec.template.spec.containers[name=sidecar].image`,
+			errorExpected: false,
+			expectedValue: "sidecar-image:v1.1.0",
+		},
+		{
+			name:          "validDownwardAPIField4",
+			pathToField:   `spec.template.spec.containers[name=foo].image`,
+			errorExpected: true,
+			errorMsg:      "no field named 'spec.template.spec.containers[name=foo].image'",
+		},
+		{
+			name:          "validDownwardAPIField5",
+			pathToField:   `spec.template.spec.containers[foo=main].image`,
+			errorExpected: true,
+			errorMsg:      "no field named 'spec.template.spec.containers[foo=main].image'",
 		},
 	}
 
