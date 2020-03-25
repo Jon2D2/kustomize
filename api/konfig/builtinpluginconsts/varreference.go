@@ -183,6 +183,9 @@ varReference:
 - path: spec/ports/targetPort
   kind: Service
 
+- path: spec
+  kind: Service
+
 - path: spec/template/spec/containers/args
   kind: StatefulSet
 
